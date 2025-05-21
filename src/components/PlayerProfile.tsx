@@ -158,8 +158,9 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
         Back to Big Board
       </Button>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4} sx={{ textAlign: 'center' }}>
+      <Grid container spacing={3} sx={{ alignItems: 'flex-start' }}>
+        {/* Left Column: Player Bio & Avatar */}
+        <Grid item xs={12} md={3} sx={{ textAlign: 'center' }}> {/* MODIFIED: md={3} for a narrower left column */}
           <Avatar
             src={playerBio.photoUrl || undefined}
             alt={playerBio.name}
@@ -174,7 +175,8 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
           <Typography variant="subtitle1" sx={{color: 'var(--mavs-silver)'}}>Weight: {playerBio.weight ? `${playerBio.weight} lbs` : 'N/A'}</Typography>
         </Grid>
 
-        <Grid item xs={12} md={8}>
+        {/* Right Column: Tabs and Tab Content */}
+        <Grid item xs={12} md={9}> {/* MODIFIED: md={9} for a wider right column */}
           <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: 2 }}>
             <Tabs value={tabValue} onChange={handleTabChange} aria-label="player profile tabs"
               TabIndicatorProps={{ style: { backgroundColor: 'var(--mavs-silver)'}}}
@@ -187,7 +189,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
           </Box>
 
           {tabValue === 0 && (
-            <Box>
+            <Box sx={{ pt: 2 }}> 
               <Typography variant="h5" gutterBottom sx={{color: 'var(--mavs-white)'}}>Biographical Information</Typography>
               <List dense>
                 <ListItem><ListItemText primary="Full Name" secondary={playerBio.name || 'N/A'} secondaryTypographyProps={{color: 'var(--mavs-silver)'}}/></ListItem>
@@ -211,12 +213,12 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
           )}
 
           {tabValue === 1 && (
-            <Box>
+            <Box sx={{ pt: 2 }}> 
               <Typography variant="h5" gutterBottom sx={{color: 'var(--mavs-white)'}}>Player Statistics</Typography>
-               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap' }}> {/* Added flexWrap for smaller screens */}
                     <FormControl size="small" sx={{ m: 1, minWidth: 120, '& .MuiOutlinedInput-root': {'& fieldset': {borderColor: 'var(--mavs-silver)'},'&:hover fieldset': {borderColor: 'var(--mavs-white)'},}, '& .MuiInputLabel-root': {color: 'var(--mavs-silver)'}, '& .MuiSelect-icon': {color: 'var(--mavs-silver)'}}}>
                         <InputLabel id="stats-view-label">View</InputLabel>
-                        <Select<typeof statsView> // Explicitly type Select
+                        <Select<typeof statsView> 
                             labelId="stats-view-label"
                             value={statsView}
                             label="View"
@@ -230,7 +232,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
                     {availableSeasons.length > 0 && (
                        <FormControl size="small" sx={{ m: 1, minWidth: 120, '& .MuiOutlinedInput-root': {'& fieldset': {borderColor: 'var(--mavs-silver)'},'&:hover fieldset': {borderColor: 'var(--mavs-white)'},}, '& .MuiInputLabel-root': {color: 'var(--mavs-silver)'}, '& .MuiSelect-icon': {color: 'var(--mavs-silver)'} }}>
                             <InputLabel id="season-select-label">Season</InputLabel>
-                            <Select<typeof selectedSeason> // Explicitly type Select
+                            <Select<typeof selectedSeason> 
                                 labelId="season-select-label"
                                 value={selectedSeason}
                                 label="Season"
@@ -280,7 +282,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
                           <TableCell sx={{color: 'var(--mavs-silver)'}}>{log.BLK != null ? log.BLK.toFixed(1) : 'N/A'}</TableCell>
                           <TableCell sx={{color: 'var(--mavs-silver)'}}>{log["FG%"] != null ? `${(log["FG%"]).toFixed(1)}%` : 'N/A'}</TableCell>
                           <TableCell sx={{color: 'var(--mavs-silver)'}}>{log["3P%"] != null ? `${(log["3P%"]).toFixed(1)}%` : 'N/A'}</TableCell>
-                          <TableCell sx={{color: 'var(--mavs-silver)'}}>{log.FTP != null ? `${(log.FTP).toFixed(1)}%` : (log["FT%"] != null ? `${(log["FT%"] * 100).toFixed(1)}%` : 'N/A')}</TableCell> {/* Assuming FT% might be a decimal like 0.75 */}
+                          <TableCell sx={{color: 'var(--mavs-silver)'}}>{log.FTP != null ? `${(log.FTP).toFixed(1)}%` : (log["FT%"] != null ? `${(log["FT%"] * 100).toFixed(1)}%` : 'N/A')}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -291,24 +293,24 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
           )}
 
           {tabValue === 2 && (
-            <Box>
+            <Box sx={{ pt: 2 }}> 
               <Typography variant="h5" gutterBottom sx={{color: 'var(--mavs-white)'}}>Scouting Reports</Typography>
               <Box mb={2} sx={{maxHeight: '300px', overflowY: 'auto', pr: 1, 
                   '&::-webkit-scrollbar': { width: '8px' },
                   '&::-webkit-scrollbar-track': { backgroundColor: 'var(--mavs-navy-blue)' },
                   '&::-webkit-scrollbar-thumb': { backgroundColor: 'var(--mavs-silver)', borderRadius: '4px' },
                   '&::-webkit-scrollbar-thumb:hover': { backgroundColor: 'var(--mavs-white)' }
-              }}> {/* Added padding right for scrollbar & scrollbar styling */}
+              }}>
                 {currentReports.length > 0 ? currentReports.map((report) => (
                   <Paper key={report.reportId} sx={{ p: 2, mb: 1, backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)' }}>
                     <Typography variant="subtitle2" gutterBottom><strong>Scout:</strong> {report.scout} {report.date && `(${report.date})`}</Typography>
-                    <Typography variant="body2" sx={{whiteSpace: "pre-wrap"}}>{report.report}</Typography> {/* Allow line breaks */}
+                    <Typography variant="body2" sx={{whiteSpace: "pre-wrap"}}>{report.report}</Typography>
                   </Paper>
                 )) : <Typography sx={{color: 'var(--mavs-silver)'}}>No scouting reports available for this player yet.</Typography>}
               </Box>
               <Typography variant="h6" gutterBottom sx={{color: 'var(--mavs-white)'}}>Add New Report</Typography>
                <TextField
-                    label="Scout Name" // Changed from Scout Name (Optional) to just Scout Name as it's always set
+                    label="Scout Name" 
                     value={selectedScout}
                     onChange={(e) => setSelectedScout(e.target.value)}
                     variant="outlined"
@@ -332,7 +334,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
                         '& fieldset': { borderColor: 'var(--mavs-silver)' },
                         '&:hover fieldset': { borderColor: 'var(--mavs-white)' },
                         '&.Mui-focused fieldset': { borderColor: 'var(--mavs-white)' },
-                        '& textarea': { color: 'var(--mavs-white)' }, // Ensure textarea text color
+                        '& textarea': { color: 'var(--mavs-white)' }, 
                     },
                     label: { color: 'var(--mavs-silver)'}
                 }}
