@@ -6,7 +6,7 @@ import BigBoard from './components/BigBoard';
 import PlayerProfile from './components/PlayerProfile';
 import { draftData } from './dataUtils'; // Import the data
 import './App.css';
-import mavsLogo from './assets/dallas-mavericks.svg';
+import mavsLogo from './assets/mavs-logo.png';
 
 // Dallas Mavericks Theme for Material UI
 const mavsTheme = createTheme({
@@ -66,27 +66,50 @@ function App() {
         <AppBar position="static">
           <Toolbar>
             {/* Replace this Box with your actual logo image */}
-            <Box
-              sx={{
-                width: 50,
-                height: 50,
-                backgroundColor: 'primary.main', // Placeholder color
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mr: 2,
-                borderRadius: '50%'
-              }}
-            >
-              <img src={mavsLogo} alt="Dallas Mavericks Logo" style={{ height: '40px', marginRight: '16px' }} />
-              <Typography variant="h6" sx={{color: "white"}}>M</Typography> {/* Placeholder */}
+<Box
+  sx={{
+    width: 50, // Or adjust to fit the logo better
+    height: 50, // Or adjust to fit the logo better
+    // backgroundColor: 'primary.main', // You might not need this if the logo has a background
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    mr: 2,
+    // borderRadius: '50%' // REMOVE OR COMMENT THIS LINE
+  }}
+>
+<img
+                src={mavsLogo}
+                alt="Dallas Mavericks Logo"
+                style={{
+                  height: '70px', // << UPDATED: Made logo bigger
+                  width: 'auto',    // Maintain aspect ratio
+                  objectFit: 'contain', // Ensures the whole logo is visible
+                  marginRight: '-20px', // Space between logo and text
+                }}
+              />
             </Box>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: mavsTheme.palette.common.white }}>
               Dallas Mavericks Draft Hub 2025
             </Typography>
             <nav className="app-nav">
-              <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>Big Board</NavLink>
-              {/* Player profiles will be navigated to from the Big Board, so a direct nav link might not be needed here unless there's a search/dropdown */}
+              <NavLink
+                to="/"
+                className={({ isActive }) => isActive ? "active-nav-link" : "inactive-nav-link"} // Using classes for potentially more complex CSS styling
+                style={({ isActive }) => ({ // Inline styles for simplicity here
+                  marginRight: '20px',
+                  color: mavsTheme.palette.common.white, // Use theme color for consistency
+                  textDecoration: 'none',
+                  padding: '8px 12px',
+                  borderRadius: '4px',
+                  fontWeight: isActive ? 'bold' : 'normal',
+                  backgroundColor: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent', // Slightly more visible active background
+                  transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out',
+                })}
+              >
+                Big Board
+              </NavLink>
+               {/* Player profiles will be navigated to from the Big Board, so a direct nav link might not be needed here unless there's a search/dropdown */}
             </nav>
           </Toolbar>
         </AppBar>
