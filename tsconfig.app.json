@@ -8,12 +8,16 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "bundler", // Or "node" if you prefer and it works with your setup
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+
+    /* Enable JSON imports */
+    "resolveJsonModule": true,
+    "esModuleInterop": true,     // Recommended for compatibility
 
     /* Linting */
     "strict": true,

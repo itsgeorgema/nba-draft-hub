@@ -1,42 +1,43 @@
-#root {
+/* src/App.css */
+.app-header {
+  background-color: var(--mavs-black);
+  padding: 20px;
+  color: var(--mavs-white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* For logo and nav */
+}
+
+.app-header img.logo {
+  height: 60px; /* Adjust as needed */
+  /* If you have a white logo on black bg, no filter needed */
+  /* For a placeholder that might need inversion on dark mode: */
+  /* filter: invert(var(--logo-invert-amount, 0)); */
+}
+
+/* Placeholder for where you would put the Mavericks logo */
+/* .mavs-logo {
+  background-image: url('YOUR_MAVS_LOGO_URL_HERE.svg'); Replace this
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 150px;
+  height: 50px;
+} */
+
+.app-nav a {
+  margin: 0 15px;
+  color: var(--mavs-silver);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.app-nav a:hover, .app-nav a.active {
+  color: var(--mavs-white);
+  text-decoration: underline;
+}
+
+.container {
+  padding: 2rem;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

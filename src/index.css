@@ -1,38 +1,55 @@
+/* src/index.css */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light dark; /* Allows for user agent or OS to set light/dark mode */
+
+  /* Dallas Mavericks Colors */
+  --mavs-royal-blue: #00538C;
+  --mavs-navy-blue: #002B5E;
+  --mavs-silver: #B8C4CA;
+  --mavs-black: #000000;
+  --mavs-white: #FFFFFF;
+
+  /* Base colors (Dark Mode example, adjust as needed) */
+  color: var(--mavs-silver);
+  background-color: var(--mavs-navy-blue);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: column;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--mavs-navy-blue); /* Ensure body background is themed */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#root {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+a {
+  font-weight: 500;
+  color: var(--mavs-silver);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--mavs-white);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--mavs-white);
 }
 
 button {
@@ -42,27 +59,53 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--mavs-royal-blue);
+  color: var(--mavs-white);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--mavs-silver);
+  background-color: #006acc; /* Slightly lighter blue on hover */
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto var(--mavs-silver);
 }
 
+/* Add specific styles for light theme if needed */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--mavs-navy-blue);
+    background-color: var(--mavs-white);
+  }
+  a {
+    color: var(--mavs-royal-blue);
   }
   a:hover {
-    color: #747bff;
+    color: var(--mavs-navy-blue);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--mavs-navy-blue);
   }
   button {
-    background-color: #f9f9f9;
+    background-color: var(--mavs-royal-blue);
+    color: var(--mavs-white);
+    border: 1px solid var(--mavs-navy-blue);
   }
+  button:hover {
+    background-color: var(--mavs-navy-blue);
+    color: var(--mavs-white);
+  }
+}
+
+/* Material UI Overrides (Example) */
+.MuiTableCell-head {
+  background-color: var(--mavs-royal-blue) !important;
+  color: var(--mavs-white) !important;
+  font-weight: bold !important;
+}
+
+.MuiTableRow-root:nth-of-type(odd) {
+  background-color: rgba(184, 196, 202, 0.1); /* Light silver for alternate rows */
 }
