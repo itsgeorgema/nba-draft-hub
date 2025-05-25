@@ -98,6 +98,7 @@ export interface SeasonLog {
   MP?: number | null;
   FGM?: number | null;
   FGA?: number | null;
+  "FT%"?: number | null; // This was used for Season Total FTM in your data, but might be confusing
   "FG%"?: number | null;
   FG2M?: number | null;
   FG2A?: number | null;

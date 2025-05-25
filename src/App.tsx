@@ -1,6 +1,5 @@
-// src/App.tsx
-import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
+
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import { ThemeProvider, createTheme, CssBaseline, AppBar, Toolbar, Typography, Container, Box } from '@mui/material';
 import BigBoard from './components/BigBoard';
 import PlayerProfile from './components/PlayerProfile';

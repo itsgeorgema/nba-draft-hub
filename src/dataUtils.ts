@@ -1,12 +1,11 @@
 // src/dataUtils.ts
 import jsonData from '../data/intern_project_data.json';
-import type { DraftData, PlayerBio, SeasonLog } from './types'; // Import defined types
+import type { DraftData, PlayerBio, SeasonLog } from './types'; // Keep PlayerBio if used
 
 export const draftData: DraftData = jsonData as DraftData;
 
-// Helper function to get player's full name from bio (if needed elsewhere, currently not used in BigBoard/PlayerProfile)
 export const getPlayerNameById = (playerId: number): string => {
-  const playerBio = draftData.bio.find(p => p.playerId === playerId);
+  const playerBio: PlayerBio | undefined = draftData.bio.find(p => p.playerId === playerId); // Explicitly type here
   return playerBio ? playerBio.name : "Unknown Player";
 };
 

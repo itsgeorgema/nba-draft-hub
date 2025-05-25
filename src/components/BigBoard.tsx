@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  TableSortLabel, Avatar, Typography, Box, Tooltip, Chip
+  TableSortLabel, Avatar, Typography, Box, Chip
 } from '@mui/material';
 import { calculateAge } from '../dataUtils';
-import { DraftData, PlayerBio, ScoutRanking, CombinedPlayerData } from '../types';
+import type { DraftData, PlayerBio, ScoutRanking, CombinedPlayerData } from '../types';
 
 interface BigBoardProps {
   playerData: DraftData;
@@ -20,13 +20,15 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
 
   const combinedData: CombinedPlayerData[] = useMemo(() => {
     return playerData.bio.map((bio: PlayerBio) => {
-      const rankings = playerData.scoutRankings.find(r => r.playerId === bio.playerId);
+      const rankings: ScoutRanking | undefined = playerData.scoutRankings.find(
+        (r: ScoutRanking) => r.playerId === bio.playerId
+      );
       let sumRanks = 0;
       let countRanks = 0;
 
       if (rankings) {
         scoutSources.forEach(source => {
-          const rankValue = rankings[source];
+          const rankValue = rankings[source as keyof ScoutRanking];
           if (rankValue != null) {
             sumRanks += rankValue;
             countRanks++;
@@ -34,7 +36,7 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
         });
       }
       const avgRank = countRanks > 0 ? sumRanks / countRanks : null;
-      const mavsRank = rankings ? rankings["ESPN Rank"] : null; // Requirement: Treat a public rank as Mavs scout
+      const mavsRank = rankings ? rankings["ESPN Rank"] : null;
 
       return {
         ...bio,
@@ -76,7 +78,7 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
     return sortableData;
   }, [combinedData, order, orderBy]);
 
-  const getRankDifferenceIndicator = (rank: number | null | undefined, avgRank: number | null) => {
+  const getRankDifferenceIndicator = (rank: number | null | undefined, avgRank: number | null | undefined) => {
     if (!rank || !avgRank) return null;
     const difference = rank - avgRank;
     if (difference < -5) return <Chip label="High" color="success" size="small" />;

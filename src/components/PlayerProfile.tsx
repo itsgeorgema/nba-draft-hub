@@ -1,4 +1,4 @@
-// src/components/PlayerProfile.tsx
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { calculateAge, calculatePerGameStats } from '../dataUtils'; // Assuming dataUtils is in src/
@@ -6,7 +6,6 @@ import {
   Container,
   Typography,
   Paper,
-  Grid,
   Avatar,
   Box,
   List,
@@ -28,11 +27,11 @@ import {
   TableCell,
   TableBody
 } from '@mui/material';
+
+import Grid from '@mui/material/Grid'; // Import Grid for layout
 import type { SelectChangeEvent } from '@mui/material/Select'; // More specific import for SelectChangeEvent
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-// Ensure this path is correct relative to PlayerProfile.tsx
-// If PlayerProfile.tsx is in src/components/ and types.ts is in src/, then '../types' is correct.
 import type { DraftData, PlayerBio, Measurement, GameLog, SeasonLog, ScoutingReport } from '../types';
 
 interface PlayerProfileProps {
@@ -157,10 +156,11 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
       >
         Back to Big Board
       </Button>
-
+      
       <Grid container spacing={3} sx={{ alignItems: 'flex-start' }}>
         {/* Left Column: Player Bio & Avatar */}
-        <Grid item xs={12} md={3} sx={{ textAlign: 'center' }}> {/* MODIFIED: md={3} for a narrower left column */}
+        {/* @ts-ignore */}
+        <Grid xs={12} md={3} sx={{ textAlign: 'center' }}> {/* MODIFIED: md={3} for a narrower left column */}
           <Avatar
             src={playerBio.photoUrl || undefined}
             alt={playerBio.name}
@@ -176,7 +176,8 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
         </Grid>
 
         {/* Right Column: Tabs and Tab Content */}
-        <Grid item xs={12} md={9}> {/* MODIFIED: md={9} for a wider right column */}
+        {/* @ts-ignore */}
+        <Grid xs={12} md={9}> {/* MODIFIED: md={9} for a wider right column */}
           <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: 2 }}>
             <Tabs value={tabValue} onChange={handleTabChange} aria-label="player profile tabs"
               TabIndicatorProps={{ style: { backgroundColor: 'var(--mavs-silver)'}}}
