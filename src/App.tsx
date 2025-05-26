@@ -9,17 +9,8 @@ import mavsLogo from './assets/mavs-logo.png';
 import { draftData } from './dataUtils'; // Import draftData directly from dataUtils
 
 function AppContent() {
-  // Initialize playerData directly from the imported draftData.
-  // Since the data is bundled, it's immediately available, so no async loading is needed.
   const [playerData] = useState<DraftData>(draftData); 
-  // No 'loading' or 'error' states related to async fetch needed anymore for this data.
   const navigate = useNavigate();
-
-  // The previous useEffect block for fetching data is no longer necessary.
-
-  // Simplified loading/error handling, assuming data is always bundled.
-  // If `draftData` itself could theoretically be null/empty, you'd add a check here.
-  // However, given it's a direct import of a static JSON, it should always be present.
   if (!playerData) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--mavs-navy-blue)', color: 'var(--mavs-white)', p:3, textAlign: 'center' }}>

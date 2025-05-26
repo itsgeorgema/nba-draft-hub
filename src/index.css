@@ -1,4 +1,3 @@
-/* General Reset and Body Styles */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -6,8 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--mavs-background); /* Using a general background color */
-  color: var(--mavs-white); /* Default text color for the app */
+  background-color: var(--mavs-background); 
+  color: var(--mavs-white); 
 }
 
 code {
@@ -15,23 +14,22 @@ code {
     monospace;
 }
 
-/* Mavericks Color Palette CSS Variables */
+
 :root {
-  --mavs-navy-blue: #002B5C; /* Primary Dark Blue */
-  --mavs-royal-blue: #0a4a92; /* Primary Bright Blue */
-  --mavs-silver: #B8C4CA;    /* Accent Silver */
-  --mavs-white: #FFFFFF;     /* Accent White */
-  --mavs-black: #000000;     /* Accent Black */
-  --mavs-background: #071A3B; /* A slightly lighter navy for main content background */
+  --mavs-navy-blue: #002B5C; 
+  --mavs-royal-blue: #0a4a92;
+  --mavs-silver: #B8C4CA;    
+  --mavs-white: #FFFFFF; 
+  --mavs-black: #000000;    
+  --mavs-background: #071A3B; 
   
-  /* New variables based on BigBoard.tsx usage */
-  --mavs-green: #00863B;     /* Success/Valuable indication */
-  --mavs-error-red: #FF6B6B; /* Error/Overrated indication */
-  --mavs-royal-blue-transparent: rgba(0, 83, 176, 0.15); /* For subtle borders (0053B0 with alpha) */
-  --mavs-royal-blue-transparent-hover: rgba(0, 83, 176, 0.3); /* For row hover (0053B0 with alpha) */
+
+  --mavs-green: #00863B; 
+  --mavs-error-red: #FF6B6B; 
+  --mavs-royal-blue-transparent: rgba(0, 83, 176, 0.15); 
+  --mavs-royal-blue-transparent-hover: rgba(0, 83, 176, 0.3); 
 }
 
-/* Scrollbar styling for a consistent look (optional, but good for dark themes) */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -45,15 +43,15 @@ code {
 ::-webkit-scrollbar-thumb {
   background: var(--mavs-royal-blue);
   border-radius: 5px;
-  border: 1px solid var(--mavs-navy-blue); /* Creates a slight inner border effect */
+  border: 1px solid var(--mavs-navy-blue); 
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #006AD5; /* Slightly lighter royal blue on hover */
+  background: #006AD5;
 }
 
-/* Ensure links don't have default blue color if not intended */
+
 a {
-  color: inherit; /* Inherit color from parent */
-  text-decoration: none; /* Optional: remove underline by default */
+  color: inherit; 
+  text-decoration: none; 
 }
