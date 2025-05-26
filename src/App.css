@@ -1,43 +1,20 @@
-/* src/App.css */
-.app-header {
-  background-color: var(--mavs-black);
-  padding: 20px;
-  color: var(--mavs-white);
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* For logo and nav */
-}
-
-.app-header img.logo {
-  height: 60px; /* Adjust as needed */
-  /* If you have a white logo on black bg, no filter needed */
-  /* For a placeholder that might need inversion on dark mode: */
-  /* filter: invert(var(--logo-invert-amount, 0)); */
-}
-
-/* Placeholder for where you would put the Mavericks logo */
-/* .mavs-logo {
-  background-image: url('YOUR_MAVS_LOGO_URL_HERE.svg'); Replace this
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 150px;
-  height: 50px;
-} */
-
 .app-nav a {
   margin: 0 15px;
   color: var(--mavs-silver);
   text-decoration: none;
   font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-.app-nav a:hover, .app-nav a.active {
+.app-nav a:hover {
   color: var(--mavs-white);
-  text-decoration: underline;
+  background-color: rgba(0, 83, 140, 0.3);
 }
 
-.container {
-  padding: 2rem;
-  max-width: 1280px;
-  margin: 0 auto;
+.app-nav a.active-nav-link {
+  color: var(--mavs-white);
+  font-weight: bold;
+  background-color: rgba(0, 83, 140, 0.5);
 }

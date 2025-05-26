@@ -1,123 +1,125 @@
-
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import { ThemeProvider, createTheme, CssBaseline, AppBar, Toolbar, Typography, Container, Box } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import HomePage from './components/HomePage'; 
 import BigBoard from './components/BigBoard';
 import PlayerProfile from './components/PlayerProfile';
-import { draftData } from './dataUtils'; // Import the data
+import { draftData } from './dataUtils';
 import './App.css';
 import mavsLogo from './assets/mavs-logo.png';
 
-// Dallas Mavericks Theme for Material UI
 const mavsTheme = createTheme({
   palette: {
-    primary: {
-      main: '#00538C', // Royal Blue
-      contrastText: '#FFFFFF',
-    },
-    secondary: {
-      main: '#B8C4CA', // Silver
-      contrastText: '#002B5E', // Navy Blue
-    },
-    background: {
-      default: '#002B5E', // Navy Blue
-      paper: '#00204A', // Darker Navy for paper elements
-    },
-    text: {
-      primary: '#FFFFFF',
-      secondary: '#B8C4CA',
-    },
+    mode: 'dark', 
+    primary: { main: '#00538C', contrastText: '#FFFFFF' },
+    secondary: { main: '#B8C4CA', contrastText: '#002B5E' },
+    background: { default: '#00204A', paper: '#002B5E' },
+    text: { primary: '#FFFFFF', secondary: '#B8C4CA' },
+    error: { main: '#FF6B6B' },
+    success: { main: '#6BCB77' }
   },
   typography: {
     fontFamily: 'system-ui, Avenir, Helvetica, Arial, sans-serif',
-    h1: { color: '#FFFFFF' },
-    h2: { color: '#FFFFFF' },
-    h3: { color: '#FFFFFF' },
-    h4: { color: '#FFFFFF' },
-    h5: { color: '#FFFFFF' },
-    h6: { color: '#FFFFFF' },
+    allVariants: { color: '#FFFFFF' },
+    body1: { color: 'var(--mavs-silver)'}, 
+    body2: { color: 'var(--mavs-silver)'},
   },
   components: {
     MuiAppBar: {
       styleOverrides: {
-        root: {
-          backgroundColor: '#000000', // Black for AppBar
-        },
+        root: { backgroundColor: '#000000', borderBottom: '2px solid var(--mavs-royal-blue)' },
       },
     },
-    MuiButton: {
+    MuiButton: { 
       styleOverrides: {
         root: {
-          color: '#FFFFFF',
+          color: 'var(--mavs-white)',
+          borderColor: 'var(--mavs-silver)',
+          '&:hover': { borderColor: 'var(--mavs-white)', backgroundColor: 'rgba(255, 255, 255, 0.08)' }
+        },
+        containedPrimary: {
+           backgroundColor: 'var(--mavs-royal-blue)',
+           '&:hover': { backgroundColor: '#006AD5' }
+        },
+        outlinedPrimary: {
+            borderColor: 'var(--mavs-royal-blue)',
+            color: 'var(--mavs-royal-blue)',
+             '&:hover': { borderColor: 'var(--mavs-silver)', backgroundColor: 'rgba(0, 83, 140, 0.1)'}
         }
       }
-    }
+    },
+    MuiPaper: {
+        styleOverrides: {
+            root: { backgroundColor: 'var(--mavs-navy-blue)', backgroundImage: 'none' }
+        }
+    },
+    MuiTableCell: {
+        styleOverrides: {
+            head: { backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold' },
+            body: { color: 'var(--mavs-silver)', borderColor: 'rgba(184, 196, 202, 0.2)' }
+        }
+    },
+    MuiTableRow: {
+        styleOverrides: {
+            root: {
+                '&:nth-of-type(odd)': { backgroundColor: 'rgba(0, 43, 94, 0.3)' },
+                 '&:hover': { backgroundColor: 'rgba(0, 83, 140, 0.3) !important' }
+            }
+        }
+    },
+     MuiAvatar: {
+        styleOverrides: {
+            root: { border: '2px solid var(--mavs-silver)', backgroundColor: 'var(--mavs-royal-blue)' }
+        }
+     },
+     MuiChip: {
+        styleOverrides: { root: { margin: '0 4px' } }
+     }
   },
 });
 
 function App() {
-  // Example state for shared data or settings if needed
-  // const [someSharedState, setSomeSharedState] = useState(null);
-
   return (
     <ThemeProvider theme={mavsTheme}>
-      <CssBaseline /> {/* Ensures Material UI styles are applied globally */}
+      <CssBaseline />
       <Router>
         <AppBar position="static">
           <Toolbar>
-            {/* Replace this Box with your actual logo image */}
-<Box
-  sx={{
-    width: 50, // Or adjust to fit the logo better
-    height: 50, // Or adjust to fit the logo better
-    // backgroundColor: 'primary.main', // You might not need this if the logo has a background
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    mr: 2,
-    // borderRadius: '50%' // REMOVE OR COMMENT THIS LINE
-  }}
->
-<img
-                src={mavsLogo}
-                alt="Dallas Mavericks Logo"
-                style={{
-                  height: '70px', // << UPDATED: Made logo bigger
-                  width: 'auto',    // Maintain aspect ratio
-                  objectFit: 'contain', // Ensures the whole logo is visible
-                  marginRight: '-20px', // Space between logo and text
-                }}
-              />
+            <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
+              <img src={mavsLogo} alt="Dallas Mavericks Logo" style={{ height: '70px', width: 'auto', objectFit: 'contain' }} />
             </Box>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: mavsTheme.palette.common.white }}>
               Dallas Mavericks Draft Hub 2025
             </Typography>
             <nav className="app-nav">
-              <NavLink
-                to="/"
-                className={({ isActive }) => isActive ? "active-nav-link" : "inactive-nav-link"} // Using classes for potentially more complex CSS styling
-                style={({ isActive }) => ({ // Inline styles for simplicity here
+               <NavLink
+                to="/home"
+                className={({ isActive }) => isActive ? "active-nav-link" : "inactive-nav-link"}
+                style={({ isActive }) => ({
                   marginRight: '20px',
-                  color: mavsTheme.palette.common.white, // Use theme color for consistency
+                  color: mavsTheme.palette.common.white,
                   textDecoration: 'none',
                   padding: '8px 12px',
-                  borderRadius: '4px',
+                  borderRadius: '8px', 
                   fontWeight: isActive ? 'bold' : 'normal',
-                  backgroundColor: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent', // Slightly more visible active background
+                  backgroundColor: isActive ? 'rgba(0, 83, 140, 0.5)' : 'transparent', 
                   transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out',
+                  display: 'flex',
+                  alignItems: 'center'
                 })}
               >
-                Big Board
+                <HomeIcon sx={{mr: 0.5}} /> Home
               </NavLink>
-               {/* Player profiles will be navigated to from the Big Board, so a direct nav link might not be needed here unless there's a search/dropdown */}
             </nav>
           </Toolbar>
         </AppBar>
 
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="xl" sx={{ mt: {xs: 2, sm: 4}, mb: 4 }}> 
           <Routes>
-            <Route path="/" element={<BigBoard playerData={draftData} />} />
+            <Route path="/" element={<HomePage />} /> 
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/bigboard" element={<BigBoard playerData={draftData} />} />
             <Route path="/player/:playerId" element={<PlayerProfile playerData={draftData} />} />
-            {/* Add other routes as needed */}
           </Routes>
         </Container>
       </Router>
