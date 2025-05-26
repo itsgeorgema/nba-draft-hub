@@ -234,7 +234,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
             <ToggleButtonGroup
               value={statsView}
               exclusive
-              onChange={(event, newView) => { if (newView !== null) setStatsView(newView); }}
+              onChange={(_event, newView) => { if (newView !== null) setStatsView(newView); }}
               aria-label="stats view"
               size="small"
             >
