@@ -16,7 +16,7 @@ function AppContent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/data/intern_project_data.json');
+        const response = await fetch('../data/intern_project_data.json');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
