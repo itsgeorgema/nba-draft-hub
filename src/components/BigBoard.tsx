@@ -98,9 +98,8 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
  const getRankDifferenceIndicator = (rank: number | null | undefined, avgRank: number | null | undefined) => {
     if (rank == null || avgRank == null) return null;
     const difference = rank - avgRank;
-    // Chips with white text and colored outline
-    if (difference < -3) return <Chip label="Valuable" size="medium" variant="outlined" sx={{ml: 1, borderColor: 'var(--mavs-green)', color: 'var(--mavs-white)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
-    if (difference > 3) return <Chip label="Overrated" size="medium" variant="outlined" sx={{ml: 1, borderColor: 'var(--mavs-error-red)', color: 'var(--mavs-white)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
+    if (difference < -3) return <Chip label="Valuable" size="medium" variant="outlined" sx={{ml: 1, color: 'var(--mavs-green)', borderColor: 'var(--mavs-green)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
+    if (difference > 3) return <Chip label="Overrated" size="medium" variant="outlined" sx={{ml: 1, color: 'var(--mavs-error-red)', borderColor: 'var(--mavs-error-red)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
     return null;
   };
 
