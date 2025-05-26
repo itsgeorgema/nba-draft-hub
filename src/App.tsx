@@ -1,129 +1,108 @@
-import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
-import { ThemeProvider, createTheme, CssBaseline, AppBar, Toolbar, Typography, Container, Box } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
-import HomePage from './components/HomePage'; 
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import HomePage from './components/HomePage';
 import BigBoard from './components/BigBoard';
 import PlayerProfile from './components/PlayerProfile';
-import { draftData } from './dataUtils';
-import './App.css';
-import mavsLogo from './assets/mavs-logo.png';
+import { Typography, CircularProgress, Box, AppBar, Toolbar, CssBaseline, Container, Button } from '@mui/material';
+import type { DraftData } from './types';
+import mavsLogo from './assets/mavs-logo.png'; // Ensure this path is correct: src/assets/mavs-logo.png
 
-const mavsTheme = createTheme({
-  palette: {
-    mode: 'dark', 
-    primary: { main: '#00538C', contrastText: '#FFFFFF' },
-    secondary: { main: '#B8C4CA', contrastText: '#002B5E' },
-    background: { default: '#00204A', paper: '#002B5E' },
-    text: { primary: '#FFFFFF', secondary: '#B8C4CA' },
-    error: { main: '#FF6B6B' },
-    success: { main: '#6BCB77' }
-  },
-  typography: {
-    fontFamily: 'system-ui, Avenir, Helvetica, Arial, sans-serif',
-    allVariants: { color: '#FFFFFF' },
-    body1: { color: 'var(--mavs-silver)'}, 
-    body2: { color: 'var(--mavs-silver)'},
-  },
-  components: {
-    MuiAppBar: {
-      styleOverrides: {
-        root: { backgroundColor: '#000000', borderBottom: '2px solid var(--mavs-royal-blue)' },
-      },
-    },
-    MuiButton: { 
-      styleOverrides: {
-        root: {
-          color: 'var(--mavs-white)',
-          borderColor: 'var(--mavs-silver)',
-          '&:hover': { borderColor: 'var(--mavs-white)', backgroundColor: 'rgba(255, 255, 255, 0.08)' }
-        },
-        containedPrimary: {
-           backgroundColor: 'var(--mavs-royal-blue)',
-           '&:hover': { backgroundColor: '#006AD5' }
-        },
-        outlinedPrimary: {
-            borderColor: 'var(--mavs-royal-blue)',
-            color: 'var(--mavs-royal-blue)',
-             '&:hover': { borderColor: 'var(--mavs-silver)', backgroundColor: 'rgba(0, 83, 140, 0.1)'}
+// Main App component structure
+function AppContent() {
+  const [playerData, setPlayerData] = useState<DraftData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate(); // Hook for navigation
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/data/intern_project_data.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const jsonData: DraftData = await response.json();
+        setPlayerData(jsonData);
+      } catch (e) {
+        if (e instanceof Error) {
+          setError(e.message);
+          console.error("Failed to fetch player data:", e.message);
+        } else {
+          setError('An unknown error occurred during data fetching.');
+          console.error("An unknown error occurred during data fetching.");
+        }
+      } finally {
+        setLoading(false);
       }
-    },
-    MuiPaper: {
-        styleOverrides: {
-            root: { backgroundColor: 'var(--mavs-navy-blue)', backgroundImage: 'none' }
-        }
-    },
-    MuiTableCell: {
-        styleOverrides: {
-            head: { backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold' },
-            body: { color: 'var(--mavs-silver)', borderColor: 'rgba(184, 196, 202, 0.2)' }
-        }
-    },
-    MuiTableRow: {
-        styleOverrides: {
-            root: {
-                '&:nth-of-type(odd)': { backgroundColor: 'rgba(0, 43, 94, 0.3)' },
-                 '&:hover': { backgroundColor: 'rgba(0, 83, 140, 0.3) !important' }
-            }
-        }
-    },
-     MuiAvatar: {
-        styleOverrides: {
-            root: { border: '2px solid var(--mavs-silver)', backgroundColor: 'var(--mavs-royal-blue)' }
-        }
-     },
-     MuiChip: {
-        styleOverrides: { root: { margin: '0 4px' } }
-     }
-  },
-});
+    };
+    fetchData();
+  }, []);
 
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--mavs-navy-blue)', color: 'var(--mavs-white)' }}>
+        <img src={mavsLogo} alt="Dallas Mavericks Logo" style={{ height: '100px', marginBottom: '20px' }} />
+        <CircularProgress color="inherit" sx={{mb: 2}}/>
+        <Typography variant="h6">Loading Draft Hub Data...</Typography>
+      </Box>
+    );
+  }
+
+  if (error || !playerData) {
+    return (
+       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--mavs-navy-blue)', color: 'var(--mavs-white)', p:3, textAlign: 'center' }}>
+        <img src={mavsLogo} alt="Dallas Mavericks Logo" style={{ height: '100px', marginBottom: '20px' }} />
+        <Typography variant="h5" sx={{color: 'var(--mavs-error-red)'}} gutterBottom>Error Loading Application Data</Typography> {/* Using CSS Variable */}
+        <Typography sx={{color: 'var(--mavs-silver)'}}>{error || 'Player data could not be loaded. Please try refreshing the page or check the console for more details.'}</Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <>
+      <AppBar position="sticky" sx={{ backgroundColor: 'var(--mavs-black)' /* Black background from CSS variable */ }}>
+        <Container maxWidth="xl" sx={{ px: { xs: '8px', sm: '12px' } /* Further Reduced horizontal padding */ }}>
+          <Toolbar disableGutters>
+            <img 
+              src={mavsLogo} 
+              alt="Mavs Logo" 
+              style={{height: 55, marginRight: 16, cursor: 'pointer'}} // Further Increased logo size
+              onClick={() => navigate('/')}
+            />
+            <Typography 
+              variant="h6" 
+              component="div" 
+              sx={{ flexGrow: 1, color: 'var(--mavs-white)', cursor: 'pointer',  '&:hover': { textDecoration: 'underline' } }} 
+              onClick={() => navigate('/')}
+            >
+              Mavs Draft Hub
+            </Typography>
+            <Button color="inherit" onClick={() => navigate('/')} sx={{color: 'var(--mavs-silver)', '&:hover': {color: 'var(--mavs-white)'}}}>Home</Button>
+            <Button color="inherit" onClick={() => navigate('/bigboard')} sx={{color: 'var(--mavs-silver)', '&:hover': {color: 'var(--mavs-white)'}}}>Big Board</Button>
+          </Toolbar>
+        </Container>
+      </AppBar>
+      <Box component="main" sx={{ flexGrow: 1, py: {xs: 2, sm:3}, backgroundColor: 'var(--mavs-background)' , minHeight: 'calc(100vh - 70px)' /* Adjusted for potentially taller AppBar */ }}>
+        <Routes>
+          <Route path="/" element={<HomePage playerData={playerData} />} />
+          <Route path="/bigboard" element={<BigBoard playerData={playerData} />} />
+          <Route path="/player/:playerId" element={<PlayerProfile playerData={playerData} />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Box>
+    </>
+  );
+}
+
+// Wrapper component to include BrowserRouter
 function App() {
   return (
-    <ThemeProvider theme={mavsTheme}>
-      <CssBaseline />
-      <Router>
-        <AppBar position="static">
-          <Toolbar>
-            <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-              <img src={mavsLogo} alt="Dallas Mavericks Logo" style={{ height: '70px', width: 'auto', objectFit: 'contain' }} />
-            </Box>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: mavsTheme.palette.common.white }}>
-              Dallas Mavericks Draft Hub 2025
-            </Typography>
-            <nav className="app-nav">
-               <NavLink
-                to="/home"
-                className={({ isActive }) => isActive ? "active-nav-link" : "inactive-nav-link"}
-                style={({ isActive }) => ({
-                  marginRight: '20px',
-                  color: mavsTheme.palette.common.white,
-                  textDecoration: 'none',
-                  padding: '8px 12px',
-                  borderRadius: '8px', 
-                  fontWeight: isActive ? 'bold' : 'normal',
-                  backgroundColor: isActive ? 'rgba(0, 83, 140, 0.5)' : 'transparent', 
-                  transition: 'background-color 0.2s ease-in-out, color 0.2s ease-in-out',
-                  display: 'flex',
-                  alignItems: 'center'
-                })}
-              >
-                <HomeIcon sx={{mr: 0.5}} /> Home
-              </NavLink>
-            </nav>
-          </Toolbar>
-        </AppBar>
-
-        <Container maxWidth="xl" sx={{ mt: {xs: 2, sm: 4}, mb: 4 }}> 
-          <Routes>
-            <Route path="/" element={<HomePage />} /> 
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/bigboard" element={<BigBoard playerData={draftData} />} />
-            <Route path="/player/:playerId" element={<PlayerProfile playerData={draftData} />} />
-          </Routes>
-        </Container>
-      </Router>
-    </ThemeProvider>
+    <>
+      <CssBaseline /> 
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </>
   );
 }
 

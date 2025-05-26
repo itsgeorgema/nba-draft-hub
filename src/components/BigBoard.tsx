@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
@@ -19,12 +19,12 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const scoutSources: string[] = useMemo(() => {
-    if (playerData.scoutRankings.length > 0) {
+    if (playerData && playerData.scoutRankings.length > 0) {
       const firstRankings = playerData.scoutRankings[0];
-      return Object.keys(firstRankings).filter(key => key !== 'playerId' && firstRankings[key as keyof ScoutRanking] != null);
+      return Object.keys(firstRankings).filter(key => key !== 'playerId' && Object.prototype.hasOwnProperty.call(firstRankings, key) && firstRankings[key as keyof ScoutRanking] != null);
     }
     return ["ESPN Rank", "Sam Vecenie Rank", "Kevin O'Connor Rank", "Kyle Boone Rank", "Gary Parrish Rank"];
-  }, [playerData.scoutRankings]);
+  }, [playerData]);
 
 
   const combinedData: CombinedPlayerData[] = useMemo(() => {
@@ -37,10 +37,12 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
 
       if (rankings) {
         scoutSources.forEach(source => {
-          const rankValue = rankings[source as keyof ScoutRanking];
-          if (rankValue != null && typeof rankValue === 'number') { 
-            sumRanks += rankValue;
-            countRanks++;
+           if (Object.prototype.hasOwnProperty.call(rankings, source)) {
+            const rankValue = rankings[source as keyof ScoutRanking];
+            if (rankValue != null && typeof rankValue === 'number') {
+              sumRanks += rankValue;
+              countRanks++;
+            }
           }
         });
       }
@@ -83,7 +85,7 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
       
       if (valA == null && valB == null) return 0;
       if (valA == null) return 1; 
-      if (valB == null) return -1;
+      if (valB == null) return -1; 
 
       if (typeof valA === 'string' && typeof valB === 'string') {
         return order === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
@@ -96,9 +98,25 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
  const getRankDifferenceIndicator = (rank: number | null | undefined, avgRank: number | null | undefined) => {
     if (rank == null || avgRank == null) return null;
     const difference = rank - avgRank;
-    if (difference < -3) return <Chip label="Valuable" color="success" size="small" variant="outlined" sx={{ml: 1, borderColor: 'success.main', color: 'success.main'}}/>;
-    if (difference > 3) return <Chip label="Overrated" color="error" size="small" variant="outlined" sx={{ml: 1, borderColor: 'error.main', color: 'error.main'}}/>;
+    // Chips with white text and colored outline
+    if (difference < -3) return <Chip label="Valuable" size="medium" variant="outlined" sx={{ml: 1, borderColor: 'var(--mavs-green)', color: 'var(--mavs-white)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
+    if (difference > 3) return <Chip label="Overrated" size="medium" variant="outlined" sx={{ml: 1, borderColor: 'var(--mavs-error-red)', color: 'var(--mavs-white)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
     return null;
+  };
+
+  const tableCellSx = { 
+    padding: '18px',
+    fontSize: '1.15rem',
+    color: 'var(--mavs-white)', 
+    borderBottom: '1px solid var(--mavs-royal-blue-transparent)', 
+  };
+  
+  const tableHeadCellSx = {
+    ...tableCellSx, 
+    backgroundColor: 'var(--mavs-royal-blue)', 
+    fontWeight: 'bold',
+    color: 'var(--mavs-white)', // Explicitly white for header text
+    borderBottom: '2px solid var(--mavs-silver)', 
   };
 
   return (
@@ -109,68 +127,82 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
         borderRadius: '16px', 
         border: '1px solid var(--mavs-royal-blue)'
     }}>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
-        <Typography variant="h4" gutterBottom component="div" sx={{ color: 'var(--mavs-white)', mb: {xs: 2, md: 0} }}>
+      <Box sx={{ p: {xs:2, sm:3}, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+        <Typography variant="h3" gutterBottom component="div" sx={{ color: 'var(--mavs-white)', mb: {xs: 2, md: 0}, fontSize: {xs: '2.3rem', sm: '2.8rem'} }}>
           2025 NBA Draft Big Board
         </Typography>
         <TextField
           label="Search Prospects"
           variant="outlined"
-          size="small"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ 
-            minWidth: '250px',
-            '& .MuiInputLabel-root': { color: 'var(--mavs-silver)' },
+            minWidth: {xs: '100%', sm:'320px'},
+            '& .MuiInputLabel-root': { color: 'var(--mavs-silver)', fontSize: '1.1rem' },
             '& .MuiOutlinedInput-root': {
-              color: 'var(--mavs-white)',
+              color: 'var(--mavs-white)', 
+              fontSize: '1.1rem',
               '& fieldset': { borderColor: 'var(--mavs-silver)' },
               '&:hover fieldset': { borderColor: 'var(--mavs-white)' },
+              '&.Mui-focused fieldset': { borderColor: 'var(--mavs-white)' },
+              '& .MuiOutlinedInput-input': { padding: '16px 18px', color: 'var(--mavs-white)' /* Ensure input text is white */ },
             },
           }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: 'var(--mavs-silver)' }} />
+                <SearchIcon sx={{ color: 'var(--mavs-silver)', fontSize: '2rem' }} />
               </InputAdornment>
             ),
           }}
         />
       </Box>
-      <TableContainer sx={{ maxHeight: 'calc(100vh - 260px)' }}> 
+      <TableContainer sx={{ maxHeight: 'calc(100vh - 250px)' }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell>Photo</TableCell>
-              <TableCell>
+              <TableCell sx={tableHeadCellSx}>Photo</TableCell>
+              <TableCell sx={tableHeadCellSx}>
                 <TableSortLabel
                   active={orderBy === 'name'}
                   direction={orderBy === 'name' ? order : 'asc'}
                   onClick={() => handleRequestSort('name')}
-                  sx={{ '&.Mui-active': { color: 'var(--mavs-white)'}, '& .MuiTableSortLabel-icon': { color: 'var(--mavs-white) !important'}}}
+                  sx={{ 
+                    '& .MuiTableSortLabel-icon': { color: 'var(--mavs-white) !important'}, 
+                    '&, &:hover, &.Mui-active': { color: 'var(--mavs-white) !important'}, // Ensure text is white in all states
+                    fontSize: '1.1rem'
+                  }}
                 >
                   Name
                 </TableSortLabel>
               </TableCell>
-              <TableCell>Team</TableCell>
-              <TableCell>Age</TableCell>
-              <TableCell>
+              <TableCell sx={tableHeadCellSx}>Team</TableCell>
+              <TableCell sx={tableHeadCellSx}>Age</TableCell>
+              <TableCell sx={tableHeadCellSx}>
                 <TableSortLabel
                   active={orderBy === 'avgRank'}
                   direction={orderBy === 'avgRank' ? order : 'asc'}
                   onClick={() => handleRequestSort('avgRank')}
-                   sx={{ '&.Mui-active': { color: 'var(--mavs-white)'}, '& .MuiTableSortLabel-icon': { color: 'var(--mavs-white) !important'}}}
+                   sx={{ 
+                    '& .MuiTableSortLabel-icon': { color: 'var(--mavs-white) !important'},
+                    '&, &:hover, &.Mui-active': { color: 'var(--mavs-white) !important'},
+                    fontSize: '1.1rem'
+                  }}
                 >
                   Avg. Scout
                 </TableSortLabel>
               </TableCell>
               {scoutSources.map(source => (
-                <TableCell key={source}>
+                <TableCell key={source} sx={tableHeadCellSx}>
                   <TableSortLabel
                      active={orderBy === source}
                      direction={orderBy === source ? order : 'asc'}
                      onClick={() => handleRequestSort(source)}
-                      sx={{ '&.Mui-active': { color: 'var(--mavs-white)'}, '& .MuiTableSortLabel-icon': { color: 'var(--mavs-white) !important'}}}
+                      sx={{ 
+                        '& .MuiTableSortLabel-icon': { color: 'var(--mavs-white) !important'}, 
+                        '&, &:hover, &.Mui-active': { color: 'var(--mavs-white) !important'},
+                        fontSize: '1.1rem' 
+                      }}
                   >
                     {source.replace(' Rank','').replace('Sam Vecenie', 'Vecenie').replace("Kevin O'Connor", "KOC")}
                   </TableSortLabel>
@@ -184,21 +216,26 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
                 hover
                 key={player.playerId}
                 onClick={() => navigate(`/player/${player.playerId}`)}
-                sx={{ cursor: 'pointer' }}
+                sx={{ 
+                  cursor: 'pointer',
+                  '&:hover': {
+                    backgroundColor: 'var(--mavs-royal-blue-transparent-hover)' 
+                  }
+                }}
               >
-                <TableCell>
-                  <Avatar src={player.photoUrl || undefined} alt={player.name}>
+                <TableCell sx={tableCellSx}>
+                  <Avatar src={player.photoUrl || undefined} alt={player.name} sx={{ width: 68, height: 68 }}>
                     {player.firstName?.charAt(0)}{player.lastName?.charAt(0)}
                   </Avatar>
                 </TableCell>
-                <TableCell sx={{color: 'var(--mavs-white)', fontWeight: 'medium'}}>{player.name}</TableCell>
-                <TableCell>{player.currentTeam || 'N/A'}</TableCell>
-                <TableCell>{calculateAge(player.birthDate)}</TableCell>
-                <TableCell sx={{fontWeight: 'medium'}}>{player.avgRank != null ? player.avgRank.toFixed(1) : 'N/A'}</TableCell>
+                <TableCell sx={{...tableCellSx, fontWeight: 'medium'}}>{player.name}</TableCell>
+                <TableCell sx={tableCellSx}>{player.currentTeam || 'N/A'}</TableCell>
+                <TableCell sx={tableCellSx}>{calculateAge(player.birthDate)}</TableCell>
+                <TableCell sx={{...tableCellSx, fontWeight: 'medium'}}>{player.avgRank != null ? player.avgRank.toFixed(1) : 'N/A'}</TableCell>
                 {scoutSources.map(source => {
-                    const rank = player.scoutRankings?.[source];
+                    const rank = player.scoutRankings?.[source as keyof ScoutRanking];
                     return (
-                        <TableCell key={`${player.playerId}-${source}`}>
+                        <TableCell key={`${player.playerId}-${source}`} sx={tableCellSx}>
                            <Box display="flex" alignItems="center">
                               {rank != null ? rank : 'N/A'}
                               {getRankDifferenceIndicator(typeof rank === 'number' ? rank : null, player.avgRank)}

@@ -15,13 +15,33 @@ interface PlayerProfileProps {
   playerData: DraftData;
 }
 
-const StatDisplay: React.FC<{ label: string; value: string | number | null | undefined; unit?: string }> = ({ label, value, unit = '' }) => (
+// Define a type for the Typography props to be passed for overriding
+type TypographyPropsOverride = Partial<React.ComponentProps<typeof ListItemText>['primaryTypographyProps']>;
+
+
+const StatDisplay: React.FC<{
+  label: string;
+  value: string | number | null | undefined;
+  unit?: string;
+  primaryTypographyProps?: TypographyPropsOverride;
+  secondaryTypographyProps?: TypographyPropsOverride;
+}> = ({ label, value, unit = '', primaryTypographyProps: primaryOverride, secondaryTypographyProps: secondaryOverride }) => (
   <ListItem sx={{ py: 0.5, px: 0 }}>
     <ListItemText
       primary={label}
       secondary={value != null && String(value).trim() !== '' ? `${String(value)}${unit}` : 'N/A'}
-      primaryTypographyProps={{ color: 'var(--mavs-silver)', fontWeight: 'medium', fontSize: '0.9rem' }}
-      secondaryTypographyProps={{color: 'var(--mavs-white)', fontSize: '1rem', fontWeight: 'bold'}}
+      primaryTypographyProps={{
+        color: 'var(--mavs-silver)',
+        fontWeight: 'medium',
+        fontSize: '1.0rem', // Default size for Bio/Combine (slightly decreased)
+        ...primaryOverride,
+      }}
+      secondaryTypographyProps={{
+        color: 'var(--mavs-white)',
+        fontSize: '1.2rem', // Default size for Bio/Combine (slightly decreased)
+        fontWeight: 'bold',
+        ...secondaryOverride,
+      }}
     />
   </ListItem>
 );
@@ -88,7 +108,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
       scout: selectedScout,
       report: newReportText,
       playerId: playerBio.playerId,
-      date: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
+      date: new Date().toISOString().split('T')[0],
     };
     setCurrentReports(prevReports => [newReport, ...prevReports].sort((a,b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()));
     setNewReportText('');
@@ -120,6 +140,23 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
   }
 
   const formatHeight = (inches?: number | null) => inches ? `${Math.floor(inches / 12)}' ${inches % 12}"` : 'N/A';
+  
+  const gameLogTableCellSx = {
+    fontSize: '1.05rem', 
+    py: '12px', 
+    px: '14px', 
+    color: 'var(--mavs-white)'
+  };
+
+  const gameLogTableHeadCellSx = {
+    ...gameLogTableCellSx,
+    backgroundColor: 'var(--mavs-royal-blue)',
+    fontWeight: 'bold',
+  };
+
+  const careerStatsPrimaryProps: TypographyPropsOverride = { fontSize: '1.1rem' };
+  const careerStatsSecondaryProps: TypographyPropsOverride = { fontSize: '1.4rem' };
+
 
   return (
     <Container maxWidth="lg" sx={{color: 'var(--mavs-white)'}}>
@@ -142,34 +179,32 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
       </Box>
 
       <SectionPaper title="Biographical Information">
-        {/* Changed md from 4 to 6 for a two-column layout on medium screens and up */}
         <Grid container spacing={{xs: 1, sm: 2}}>
-            <Grid item xs={12} sm={6} md={6}><StatDisplay label="Birth Date" value={playerBio.birthDate ? new Date(playerBio.birthDate).toLocaleDateString() : 'N/A'} /></Grid>
-            <Grid item xs={12} sm={6} md={6}><StatDisplay label="Age" value={calculateAge(playerBio.birthDate)} /></Grid>
-            <Grid item xs={12} sm={6} md={6}><StatDisplay label="Nationality" value={playerBio.nationality} /></Grid>
-            <Grid item xs={12} sm={6} md={6}><StatDisplay label="League Type" value={playerBio.leagueType} /></Grid>
-            <Grid item xs={12} sm={6} md={6}><StatDisplay label="Height (Listed)" value={formatHeight(playerBio.height)} /></Grid>
-            <Grid item xs={12} sm={6} md={6}><StatDisplay label="Weight (Listed)" value={playerBio.weight} unit=" lbs" /></Grid>
-            <Grid item xs={12} sm={6} md={6}><StatDisplay label="High School" value={`${playerBio.highSchool || ''} ${playerBio.highSchoolState ? `(${playerBio.highSchoolState})` : ''}`.trim() || 'N/A'} /></Grid>
-             <Grid item xs={12} sm={6} md={6}><StatDisplay label="Hometown" value={`${playerBio.homeTown || ''}${playerBio.homeState ? `, ${playerBio.homeState}` : ''}`.trim() || 'N/A'} /></Grid>
+            <Grid item xs={12} sm={6} md={4}><StatDisplay label="Birth Date" value={playerBio.birthDate ? new Date(playerBio.birthDate).toLocaleDateString() : 'N/A'} /></Grid>
+            <Grid item xs={12} sm={6} md={4}><StatDisplay label="Age" value={calculateAge(playerBio.birthDate)} /></Grid>
+            <Grid item xs={12} sm={6} md={4}><StatDisplay label="Height (Listed)" value={formatHeight(playerBio.height)} /></Grid>
+            <Grid item xs={12} sm={6} md={4}><StatDisplay label="Weight (Listed)" value={playerBio.weight} unit=" lbs" /></Grid>
+            <Grid item xs={12} sm={6} md={4}><StatDisplay label="Nationality" value={playerBio.nationality} /></Grid>
+            <Grid item xs={12} sm={6} md={4}><StatDisplay label="Hometown" value={`${playerBio.homeTown || ''}${playerBio.homeState ? `, ${playerBio.homeState}` : ''}`.trim() || 'N/A'} /></Grid>
+            <Grid item xs={12} sm={6} md={4}><StatDisplay label="High School" value={`${playerBio.highSchool || ''} ${playerBio.highSchoolState ? `(${playerBio.highSchoolState})` : ''}`.trim() || 'N/A'} /></Grid>
+            <Grid item xs={12} sm={6} md={4}><StatDisplay label="League Type" value={playerBio.leagueType} /></Grid>
         </Grid>
       </SectionPaper>
 
       {playerMeasurements && (
         <SectionPaper title="Combine Measurements">
-          {/* Changed md from 3 to 4 for a three-column layout on medium screens and up, providing more space */}
           <Grid container spacing={{xs: 1, sm: 2}}>
-            <Grid item xs={6} sm={4} md={4}><StatDisplay label="Height (Shoes)" value={playerMeasurements.heightShoes} unit='"' /></Grid>
-            <Grid item xs={6} sm={4} md={4}><StatDisplay label="Weight" value={playerMeasurements.weight} unit=" lbs" /></Grid>
-            <Grid item xs={6} sm={4} md={4}><StatDisplay label="Wingspan" value={playerMeasurements.wingspan} unit='"' /></Grid>
-            <Grid item xs={6} sm={4} md={4}><StatDisplay label="Standing Reach" value={playerMeasurements.reach} unit='"' /></Grid>
-            <Grid item xs={6} sm={4} md={4}><StatDisplay label="Max Vertical" value={playerMeasurements.maxVertical} unit='"' /></Grid>
-            <Grid item xs={6} sm={4} md={4}><StatDisplay label="No-Step Vertical" value={playerMeasurements.noStepVertical} unit='"' /></Grid>
-             {playerMeasurements.bodyFat != null && <Grid item xs={6} sm={4} md={4}><StatDisplay label="Body Fat %" value={playerMeasurements.bodyFat} unit="%" /></Grid>}
-             {playerMeasurements.handLength != null && <Grid item xs={6} sm={4} md={4}><StatDisplay label="Hand Length" value={playerMeasurements.handLength} unit='"' /></Grid>}
-             {playerMeasurements.handWidth != null && <Grid item xs={6} sm={4} md={4}><StatDisplay label="Hand Width" value={playerMeasurements.handWidth} unit='"' /></Grid>}
-             {playerMeasurements.agility != null && <Grid item xs={6} sm={4} md={4}><StatDisplay label="Lane Agility" value={playerMeasurements.agility} unit="s" /></Grid>}
-             {playerMeasurements.sprint != null && <Grid item xs={6} sm={4} md={4}><StatDisplay label="Sprint" value={playerMeasurements.sprint} unit="s" /></Grid>}
+            <Grid item xs={6} sm={4} md={3}><StatDisplay label="Height (Shoes)" value={playerMeasurements.heightShoes} unit='"' /></Grid>
+            <Grid item xs={6} sm={4} md={3}><StatDisplay label="Weight" value={playerMeasurements.weight} unit=" lbs" /></Grid>
+            <Grid item xs={6} sm={4} md={3}><StatDisplay label="Wingspan" value={playerMeasurements.wingspan} unit='"' /></Grid>
+            <Grid item xs={6} sm={4} md={3}><StatDisplay label="Standing Reach" value={playerMeasurements.reach} unit='"' /></Grid>
+            {playerMeasurements.bodyFat != null && <Grid item xs={6} sm={4} md={3}><StatDisplay label="Body Fat %" value={playerMeasurements.bodyFat} unit="%" /></Grid>}
+            <Grid item xs={6} sm={4} md={3}><StatDisplay label="Max Vertical" value={playerMeasurements.maxVertical} unit='"' /></Grid>
+            <Grid item xs={6} sm={4} md={3}><StatDisplay label="No-Step Vertical" value={playerMeasurements.noStepVertical} unit='"' /></Grid>
+            {playerMeasurements.sprint != null && <Grid item xs={6} sm={4} md={3}><StatDisplay label="Sprint" value={playerMeasurements.sprint} unit="s" /></Grid>}
+            {playerMeasurements.agility != null && <Grid item xs={6} sm={4} md={3}><StatDisplay label="Lane Agility" value={playerMeasurements.agility} unit="s" /></Grid>}
+            {playerMeasurements.handLength != null && <Grid item xs={6} sm={4} md={3}><StatDisplay label="Hand Length" value={playerMeasurements.handLength} unit='"' /></Grid>}
+            {playerMeasurements.handWidth != null && <Grid item xs={6} sm={4} md={3}><StatDisplay label="Hand Width" value={playerMeasurements.handWidth} unit='"' /></Grid>}
           </Grid>
         </SectionPaper>
       )}
@@ -210,25 +245,19 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
             <Card key={`${log.playerId}-${log.Season}-${log.Team}-${index}`} sx={{ mb: 2, backgroundColor: 'var(--mavs-royal-blue)', borderRadius: '12px' }}>
               <CardContent>
                 <Typography variant="h6" gutterBottom sx={{color: 'var(--mavs-white)', fontWeight:'bold'}}>{log.Season} Season - {log.Team} ({log.League})</Typography>
-                {/* Changed md from 2 to 3 for stats, meaning 4 stats per row on md screens for better readability. Reordered stats. */}
                 <Grid container spacing={1}>
-                  {/* Group 1: Playing Time & Core Production */}
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="GP" value={log.GP} /></Grid>
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="GS" value={log.GS} /></Grid>
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label={statsView === 'perGame' ? "MPG" : "MP"} value={log.MP?.toFixed(1)} /></Grid>
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="PTS" value={log.PTS?.toFixed(1)} /></Grid>
-                  
-                  {/* Group 2: Rebounds, Assists & Defensive */}
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="REB" value={log.TRB?.toFixed(1)} /></Grid>
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="AST" value={log.AST?.toFixed(1)} /></Grid>
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="STL" value={log.STL?.toFixed(1)} /></Grid>
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="BLK" value={log.BLK?.toFixed(1)} /></Grid>
-
-                  {/* Group 3: Shooting Efficiency & Turnovers */}
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="FG%" value={log["FG%"]?.toFixed(1)} unit="%" /></Grid>
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="3P%" value={log["3P%"]?.toFixed(1)} unit="%" /></Grid>
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="FT%" value={(log.FTP ?? log["FT%"])?.toFixed(1)} unit="%" /></Grid>
-                  <Grid item xs={6} sm={3} md={3}><StatDisplay label="TOV" value={log.TOV?.toFixed(1)} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="PTS" value={log.PTS?.toFixed(1)} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="REB" value={log.TRB?.toFixed(1)} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="AST" value={log.AST?.toFixed(1)} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label={statsView === 'perGame' ? "MPG" : "MP"} value={log.MP?.toFixed(1)} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="GP" value={log.GP} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="GS" value={log.GS} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="STL" value={log.STL?.toFixed(1)} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="BLK" value={log.BLK?.toFixed(1)} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="FG%" value={log["FG%"]?.toFixed(1)} unit="%" primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="3P%" value={log["3P%"]?.toFixed(1)} unit="%" primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="FT%" value={(log.FTP ?? log["FT%"])?.toFixed(1)} unit="%" primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
+                  <Grid item xs={12} sm={12} md={12}><StatDisplay label="TOV" value={log.TOV?.toFixed(1)} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
                 </Grid>
               </CardContent>
             </Card>
@@ -242,30 +271,29 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
             <Table stickyHeader size="small" aria-label="player game logs">
               <TableHead>
                 <TableRow>
-                  {/* Added sx for header cells for theming consistency */}
-                  <TableCell sx={{backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}}>Date</TableCell>
-                  <TableCell sx={{backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}}>Opponent</TableCell>
-                  <TableCell sx={{backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}}>MP</TableCell>
-                  <TableCell sx={{backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}}>PTS</TableCell>
-                  <TableCell sx={{backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}}>REB</TableCell>
-                  <TableCell sx={{backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}}>AST</TableCell>
-                  <TableCell sx={{backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}}>FG%</TableCell>
-                  <TableCell sx={{backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}}>3P%</TableCell>
-                  <TableCell sx={{backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}}>+/-</TableCell>
+                  <TableCell sx={gameLogTableHeadCellSx}>Date</TableCell>
+                  <TableCell sx={gameLogTableHeadCellSx}>Opponent</TableCell>
+                  <TableCell sx={gameLogTableHeadCellSx}>MP</TableCell>
+                  <TableCell sx={gameLogTableHeadCellSx}>PTS</TableCell>
+                  <TableCell sx={gameLogTableHeadCellSx}>REB</TableCell>
+                  <TableCell sx={gameLogTableHeadCellSx}>AST</TableCell>
+                  <TableCell sx={gameLogTableHeadCellSx}>FG%</TableCell>
+                  <TableCell sx={gameLogTableHeadCellSx}>3P%</TableCell>
+                  <TableCell sx={gameLogTableHeadCellSx}>+/-</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {playerGameLogs.slice(0, 10).map((log) => (
-                  <TableRow key={log.gameId} sx={{ '&:hover': { backgroundColor: 'rgba(0, 83, 140, 0.3)' }}}> {/* Added hover effect */}
-                    <TableCell sx={{color: 'var(--mavs-white)'}}>{new Date(log.date).toLocaleDateString()}</TableCell>
-                    <TableCell sx={{color: 'var(--mavs-white)'}}>{log.opponent}</TableCell>
-                    <TableCell sx={{color: 'var(--mavs-white)'}}>{formatGameLogTime(log.timePlayed)}</TableCell>
-                    <TableCell sx={{color: 'var(--mavs-white)'}}>{log.pts ?? 'N/A'}</TableCell>
-                    <TableCell sx={{color: 'var(--mavs-white)'}}>{log.reb ?? 'N/A'}</TableCell>
-                    <TableCell sx={{color: 'var(--mavs-white)'}}>{log.ast ?? 'N/A'}</TableCell>
-                    <TableCell sx={{color: 'var(--mavs-white)'}}>{log["fg%"] != null ? `${log["fg%"].toFixed(1)}%` : 'N/A'}</TableCell>
-                    <TableCell sx={{color: 'var(--mavs-white)'}}>{log["tp%"] != null ? `${log["tp%"].toFixed(1)}%` : 'N/A'}</TableCell>
-                    <TableCell sx={{color: 'var(--mavs-white)'}}>{log.plusMinus ?? 'N/A'}</TableCell>
+                  <TableRow key={log.gameId} sx={{ '&:hover': { backgroundColor: 'rgba(0, 83, 140, 0.3)' }}}>
+                    <TableCell sx={gameLogTableCellSx}>{new Date(log.date).toLocaleDateString()}</TableCell>
+                    <TableCell sx={gameLogTableCellSx}>{log.opponent}</TableCell>
+                    <TableCell sx={gameLogTableCellSx}>{formatGameLogTime(log.timePlayed)}</TableCell>
+                    <TableCell sx={gameLogTableCellSx}>{log.pts ?? 'N/A'}</TableCell>
+                    <TableCell sx={gameLogTableCellSx}>{log.reb ?? 'N/A'}</TableCell>
+                    <TableCell sx={gameLogTableCellSx}>{log.ast ?? 'N/A'}</TableCell>
+                    <TableCell sx={gameLogTableCellSx}>{log["fg%"] != null ? `${log["fg%"].toFixed(1)}%` : 'N/A'}</TableCell>
+                    <TableCell sx={gameLogTableCellSx}>{log["tp%"] != null ? `${log["tp%"].toFixed(1)}%` : 'N/A'}</TableCell>
+                    <TableCell sx={gameLogTableCellSx}>{log.plusMinus ?? 'N/A'}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -284,13 +312,13 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
           {currentReports.length > 0 ? currentReports.map((report) => (
             <Paper key={report.reportId} sx={{ p: 2, mb: 2, backgroundColor: 'var(--mavs-royal-blue)', borderRadius: '8px' }}>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={0.5}>
-                <Typography variant="subtitle2" sx={{color: 'var(--mavs-white)', fontWeight: 'bold'}}>{report.scout}</Typography>
-                <Typography variant="caption" sx={{color: 'var(--mavs-silver)'}}>{report.date ? new Date(report.date).toLocaleDateString() : 'No Date'}</Typography>
+                <Typography variant="subtitle2" sx={{color: 'var(--mavs-white)', fontWeight: 'bold', fontSize: '1.0rem'}}>{report.scout}</Typography>
+                <Typography variant="caption" sx={{color: 'var(--mavs-silver)', fontSize: '0.9rem'}}>{report.date ? new Date(report.date).toLocaleDateString() : 'No Date'}</Typography>
               </Box>
               <Divider sx={{ borderColor: 'rgba(184, 196, 202, 0.3)', mb:1 }}/>
-              <Typography variant="body2" sx={{whiteSpace: "pre-wrap", color: 'var(--mavs-white)'}}>{report.report}</Typography>
+              <Typography variant="body2" sx={{whiteSpace: "pre-wrap", color: 'var(--mavs-white)', fontSize: '1.0rem'}}>{report.report}</Typography>
             </Paper>
-          )) : <Typography sx={{color: 'var(--mavs-silver)', fontStyle: 'italic'}}>No scouting reports available for this player yet.</Typography>}
+          )) : <Typography sx={{color: 'var(--mavs-silver)', fontStyle: 'italic', fontSize: '1.0rem' }}>No scouting reports available for this player yet.</Typography>}
         </Box>
         <Typography variant="h6" gutterBottom sx={{color: 'var(--mavs-white)', mt: 3, fontWeight: 'bold'}}>Add New Report</Typography>
          <TextField

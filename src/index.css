@@ -1,62 +1,59 @@
-:root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: dark;
-  --mavs-royal-blue: #00538C;
-  --mavs-navy-blue: #002B5E;
-  --mavs-darker-navy: #00204A;
-  --mavs-silver: #B8C4CA;
-  --mavs-black: #000000;
-  --mavs-white: #FFFFFF;
-  color: var(--mavs-silver);
-  background-color: var(--mavs-darker-navy);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
+/* General Reset and Body Styles */
 body {
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  min-width: 320px;
-  min-height: 100vh;
-  background-color: var(--mavs-darker-navy);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--mavs-background); /* Using a general background color */
+  color: var(--mavs-white); /* Default text color for the app */
 }
 
-#root {
-  width: 100%;
-  margin: 0 auto;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
-a {
-  font-weight: 500;
-  color: var(--mavs-silver);
-  text-decoration: none;
-}
-a:hover {
-  color: var(--mavs-white);
+/* Mavericks Color Palette CSS Variables */
+:root {
+  --mavs-navy-blue: #002B5C; /* Primary Dark Blue */
+  --mavs-royal-blue: #0a4a92; /* Primary Bright Blue */
+  --mavs-silver: #B8C4CA;    /* Accent Silver */
+  --mavs-white: #FFFFFF;     /* Accent White */
+  --mavs-black: #000000;     /* Accent Black */
+  --mavs-background: #071A3B; /* A slightly lighter navy for main content background */
+  
+  /* New variables based on BigBoard.tsx usage */
+  --mavs-green: #00863B;     /* Success/Valuable indication */
+  --mavs-error-red: #FF6B6B; /* Error/Overrated indication */
+  --mavs-royal-blue-transparent: rgba(0, 83, 176, 0.15); /* For subtle borders (0053B0 with alpha) */
+  --mavs-royal-blue-transparent-hover: rgba(0, 83, 176, 0.3); /* For row hover (0053B0 with alpha) */
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: var(--mavs-white);
-}
-
+/* Scrollbar styling for a consistent look (optional, but good for dark themes) */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--mavs-darker-navy);
+  background: var(--mavs-navy-blue);
   border-radius: 5px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: var(--mavs-silver);
+  background: var(--mavs-royal-blue);
   border-radius: 5px;
+  border: 1px solid var(--mavs-navy-blue); /* Creates a slight inner border effect */
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--mavs-white);
+  background: #006AD5; /* Slightly lighter royal blue on hover */
+}
+
+/* Ensure links don't have default blue color if not intended */
+a {
+  color: inherit; /* Inherit color from parent */
+  text-decoration: none; /* Optional: remove underline by default */
 }
