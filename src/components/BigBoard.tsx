@@ -98,36 +98,37 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
  const getRankDifferenceIndicator = (rank: number | null | undefined, avgRank: number | null | undefined) => {
     if (rank == null || avgRank == null) return null;
     const difference = rank - avgRank;
-    if (difference < -3) return <Chip label="Valuable" size="medium" variant="outlined" sx={{ml: 1, color: 'var(--mavs-green)', borderColor: 'var(--mavs-green)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
-    if (difference > 3) return <Chip label="Overrated" size="medium" variant="outlined" sx={{ml: 1, color: 'var(--mavs-error-red)', borderColor: 'var(--mavs-error-red)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
+    if (difference < -3) return <Chip label="Valuable" size="medium" variant="outlined" sx={{ml: 1, color: 'var(--nba-green)', borderColor: 'var(--nba-green)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
+    if (difference > 3) return <Chip label="Overrated" size="medium" variant="outlined" sx={{ml: 1, color: 'var(--nba-error-red)', borderColor: 'var(--nba-error-red)', fontSize: '0.9rem', height: '32px', fontWeight: 'medium'}}/>;
     return null;
   };
 
   const tableCellSx = { 
     padding: '18px',
     fontSize: '1.15rem',
-    color: 'var(--mavs-white)', 
-    borderBottom: '1px solid var(--mavs-royal-blue-transparent)', 
+    color: 'var(--nba-white)', 
+    borderBottom: '1px solid var(--nba-royal-blue-transparent)', 
   };
   
   const tableHeadCellSx = {
     ...tableCellSx, 
-    backgroundColor: 'var(--mavs-royal-blue)', 
+    backgroundColor: 'var(--nba-royal-blue)', 
     fontWeight: 'bold',
-    color: 'var(--mavs-white)', // Explicitly white for header text
-    borderBottom: '2px solid var(--mavs-silver)', 
+    color: 'var(--nba-white)', // Explicitly white for header text
+    borderBottom: '2px solid var(--nba-red)', 
+    borderTop: '2px solid var(--nba-red)', 
   };
 
   return (
     <Paper sx={{ 
         width: '100%', 
         overflow: 'hidden', 
-        backgroundColor: 'var(--mavs-navy-blue)', 
+        backgroundColor: 'var(--nba-navy-blue)', 
         borderRadius: '16px', 
-        border: '1px solid var(--mavs-royal-blue)'
+        border: '2px solid var(--nba-red)'
     }}>
       <Box sx={{ p: {xs:2, sm:3}, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
-        <Typography variant="h3" gutterBottom component="div" sx={{ color: 'var(--mavs-white)', mb: {xs: 2, md: 0}, fontSize: {xs: '2.3rem', sm: '2.8rem'} }}>
+        <Typography variant="h3" gutterBottom component="div" sx={{ color: 'var(--nba-white)', mb: {xs: 2, md: 0}, fontSize: {xs: '2.3rem', sm: '2.8rem'} }}>
           2025 NBA Draft Big Board
         </Typography>
         <TextField
@@ -137,20 +138,22 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ 
             minWidth: {xs: '100%', sm:'320px'},
-            '& .MuiInputLabel-root': { color: 'var(--mavs-silver)', fontSize: '1.1rem' },
+            '& .MuiInputLabel-root': { color: 'var(--nba-silver)', fontSize: '1.1rem' },
+            '& .MuiInputLabel-root.Mui-focused': { color: 'var(--nba-red)' },
             '& .MuiOutlinedInput-root': {
-              color: 'var(--mavs-white)', 
+              color: 'var(--nba-white)', 
               fontSize: '1.1rem',
-              '& fieldset': { borderColor: 'var(--mavs-silver)' },
-              '&:hover fieldset': { borderColor: 'var(--mavs-white)' },
-              '&.Mui-focused fieldset': { borderColor: 'var(--mavs-white)' },
-              '& .MuiOutlinedInput-input': { padding: '16px 18px', color: 'var(--mavs-white)' /* Ensure input text is white */ },
+              '& fieldset': { borderColor: 'var(--nba-red)' },
+              '&:hover fieldset': { borderColor: 'var(--nba-red)' },
+              '&.Mui-focused fieldset': { borderColor: 'var(--nba-red)' },
+              '& .MuiOutlinedInput-input': { padding: '16px 18px', color: 'var(--nba-white)' /* Ensure input text is white */ },
+              '&.Mui-focused .MuiInputLabel-root': { color: 'var(--nba-royal-blue)' },
             },
           }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: 'var(--mavs-silver)', fontSize: '2rem' }} />
+                <SearchIcon sx={{ color: 'var(--nba-silver)', fontSize: '2rem' }} />
               </InputAdornment>
             ),
           }}
@@ -167,8 +170,8 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
                   direction={orderBy === 'name' ? order : 'asc'}
                   onClick={() => handleRequestSort('name')}
                   sx={{ 
-                    '& .MuiTableSortLabel-icon': { color: 'var(--mavs-white) !important'}, 
-                    '&, &:hover, &.Mui-active': { color: 'var(--mavs-white) !important'}, // Ensure text is white in all states
+                    '& .MuiTableSortLabel-icon': { color: 'var(--nba-white) !important'}, 
+                    '&, &:hover, &.Mui-active': { color: 'var(--nba-white) !important'}, // Ensure text is white in all states
                     fontSize: '1.1rem'
                   }}
                 >
@@ -183,8 +186,8 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
                   direction={orderBy === 'avgRank' ? order : 'asc'}
                   onClick={() => handleRequestSort('avgRank')}
                    sx={{ 
-                    '& .MuiTableSortLabel-icon': { color: 'var(--mavs-white) !important'},
-                    '&, &:hover, &.Mui-active': { color: 'var(--mavs-white) !important'},
+                    '& .MuiTableSortLabel-icon': { color: 'var(--nba-white) !important'},
+                    '&, &:hover, &.Mui-active': { color: 'var(--nba-white) !important'},
                     fontSize: '1.1rem'
                   }}
                 >
@@ -198,8 +201,8 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
                      direction={orderBy === source ? order : 'asc'}
                      onClick={() => handleRequestSort(source)}
                       sx={{ 
-                        '& .MuiTableSortLabel-icon': { color: 'var(--mavs-white) !important'}, 
-                        '&, &:hover, &.Mui-active': { color: 'var(--mavs-white) !important'},
+                        '& .MuiTableSortLabel-icon': { color: 'var(--nba-white) !important'}, 
+                        '&, &:hover, &.Mui-active': { color: 'var(--nba-white) !important'},
                         fontSize: '1.1rem' 
                       }}
                   >
@@ -218,7 +221,7 @@ const BigBoard = ({ playerData }: BigBoardProps) => {
                 sx={{ 
                   cursor: 'pointer',
                   '&:hover': {
-                    backgroundColor: 'var(--mavs-royal-blue-transparent-hover)' 
+                    backgroundColor: 'var(--nba-royal-blue-transparent-hover)' 
                   }
                 }}
               >

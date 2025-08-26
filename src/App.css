@@ -1,6 +1,6 @@
 .app-nav a {
   margin: 0 15px;
-  color: var(--mavs-silver);
+  color: var(--nba-silver);
   text-decoration: none;
   font-weight: bold;
   padding: 8px 12px;
@@ -9,12 +9,12 @@
 }
 
 .app-nav a:hover {
-  color: var(--mavs-white);
-  background-color: rgba(0, 83, 140, 0.3);
+  color: var(--nba-white);
+  background-color: rgba(23, 64, 139, 0.3);
 }
 
 .app-nav a.active-nav-link {
-  color: var(--mavs-white);
+  color: var(--nba-white);
   font-weight: bold;
-  background-color: rgba(0, 83, 140, 0.5);
+  background-color: rgba(23, 64, 139, 0.5);
 }

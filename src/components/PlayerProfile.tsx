@@ -30,13 +30,13 @@ const StatDisplay: React.FC<{
       primary={label}
       secondary={value != null && String(value).trim() !== '' ? `${String(value)}${unit}` : 'N/A'}
       primaryTypographyProps={{
-        color: 'var(--mavs-silver)',
+        color: 'var(--nba-silver)',
         fontWeight: 'medium',
         fontSize: '1.0rem', 
         ...primaryOverride,
       }}
       secondaryTypographyProps={{
-        color: 'var(--mavs-white)',
+        color: 'var(--nba-white)',
         fontSize: '1.2rem', 
         fontWeight: 'bold',
         ...secondaryOverride,
@@ -46,8 +46,8 @@ const StatDisplay: React.FC<{
 );
 
 const SectionPaper: React.FC<{ children: React.ReactNode, title: string, sx?: object }> = ({ children, title, sx }) => (
-    <Paper elevation={3} sx={{ p: {xs: 2, sm: 3}, mb: 3, backgroundColor: 'var(--mavs-navy-blue)', borderRadius: '16px', border: '1px solid var(--mavs-royal-blue)', ...sx }}>
-        <Typography variant="h5" component="h2" gutterBottom sx={{ color: 'var(--mavs-white)', borderBottom: '2px solid var(--mavs-royal-blue)', pb: 1, mb: 2, fontWeight: 'bold' }}>
+    <Paper elevation={3} sx={{ p: {xs: 2, sm: 3}, mb: 3, backgroundColor: 'var(--nba-navy-blue)', borderRadius: '16px', border: '2px solid var(--nba-red)', ...sx }}>
+        <Typography variant="h5" component="h2" gutterBottom sx={{ color: 'var(--nba-white)', borderBottom: '2px solid var(--nba-red)', pb: 1, mb: 2, fontWeight: 'bold' }}>
             {title}
         </Typography>
         {children}
@@ -129,9 +129,9 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
 
   if (!playerBio) {
     return ( // This Container might need to be a Box if PlayerProfile is wrapped in App.tsx's Container
-        <Box sx={{textAlign: 'center', mt: 4, color: 'var(--mavs-white)'}}> {/* Changed to Box */}
+        <Box sx={{textAlign: 'center', mt: 4, color: 'var(--nba-white)'}}> {/* Changed to Box */}
             <Typography variant="h5" color="error">Player not found.</Typography>
-            <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={() => navigate('/bigboard')} sx={{ mt: 2, color: 'var(--mavs-silver)', borderColor: 'var(--mavs-silver)', '&:hover': {color: 'var(--mavs-white)', borderColor: 'var(--mavs-white)'} }}>
+            <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={() => navigate('/bigboard')} sx={{ mt: 2, color: 'var(--nba-silver)', borderColor: 'var(--nba-silver)', '&:hover': {color: 'var(--nba-white)', borderColor: 'var(--nba-white)'} }}>
               Back to Big Board
             </Button>
         </Box>
@@ -144,12 +144,12 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
     fontSize: '1.05rem', 
     py: '12px', 
     px: '14px', 
-    color: 'var(--mavs-white)'
+    color: 'var(--nba-white)'
   };
 
   const gameLogTableHeadCellSx = {
     ...gameLogTableCellSx,
-    backgroundColor: 'var(--mavs-royal-blue)',
+    backgroundColor: 'var(--nba-royal-blue)',
     fontWeight: 'bold',
   };
 
@@ -159,8 +159,8 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
 
   return (
     // Changed root from Container to Box, as App.tsx now wraps PlayerProfile route in a Container
-    <Box sx={{color: 'var(--mavs-white)'}}> 
-      <IconButton onClick={() => navigate('/bigboard')} sx={{ position: 'absolute', top: {xs: 80, sm: 90}, left: {xs: 16, sm: 24}, color: 'var(--mavs-silver)', zIndex: 10, '&:hover': {color: 'var(--mavs-white)', backgroundColor: 'rgba(255,255,255,0.1)'} }}>
+    <Box sx={{color: 'var(--nba-white)'}}> 
+      <IconButton onClick={() => navigate('/bigboard')} sx={{ position: 'absolute', top: {xs: 100, sm: 110}, left: {xs: 16, sm: 24}, color: 'var(--nba-silver)', zIndex: 10, '&:hover': {color: 'var(--nba-white)', backgroundColor: 'rgba(255,255,255,0.1)'} }}>
         <ArrowBackIcon fontSize="large"/>
       </IconButton>
 
@@ -173,7 +173,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
           {playerBio.firstName?.charAt(0)}{playerBio.lastName?.charAt(0)}
         </Avatar>
         <Typography variant="h3" component="h1" gutterBottom sx={{fontWeight: 'bold'}}>{playerBio.name}</Typography>
-        <Typography variant="h6" sx={{color: 'var(--mavs-silver)'}}>
+        <Typography variant="h6" sx={{color: 'var(--nba-silver)'}}>
             {playerBio.currentTeam || 'N/A'} - {playerBio.league || 'N/A'}
         </Typography>
       </Box>
@@ -237,33 +237,57 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
               onChange={(_event, newView) => { if (newView !== null) setStatsView(newView); }}
               aria-label="stats view"
               size="small"
+              sx={{
+                '& .MuiToggleButtonGroup-grouped': {
+                  border: '1px solid var(--nba-white)',
+                  '&:not(:first-of-type)': {
+                    borderLeft: '1px solid var(--nba-white)'
+                  }
+                }
+              }}
             >
-              <ToggleButton value="perGame" aria-label="per game" sx={{color: 'var(--mavs-silver)', '&.Mui-selected': {backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}, '&:hover': {backgroundColor: 'rgba(0, 83, 140, 0.2)'}}}>Per Game</ToggleButton>
-              <ToggleButton value="seasonTotal" aria-label="season totals" sx={{color: 'var(--mavs-silver)', '&.Mui-selected': {backgroundColor: 'var(--mavs-royal-blue)', color: 'var(--mavs-white)', fontWeight: 'bold'}, '&:hover': {backgroundColor: 'rgba(0, 83, 140, 0.2)'}}}>Season Totals</ToggleButton>
+              <ToggleButton value="perGame" aria-label="per game" sx={{
+                backgroundColor: 'var(--nba-red)',
+                color: 'var(--nba-white)',
+                fontWeight: 'bold',
+                '&.Mui-selected': {backgroundColor: 'var(--nba-red)', color: 'var(--nba-white)', fontWeight: 'bold'},
+                '&:not(.Mui-selected)': {backgroundColor: 'rgba(200, 0, 0, 0.6)', boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.5)'},
+                '&:hover': {backgroundColor: 'var(--nba-red)'},
+                '&.Mui-selected:hover': {backgroundColor: 'var(--nba-red)'}
+              }}>Per Game</ToggleButton>
+              <ToggleButton value="seasonTotal" aria-label="season totals" sx={{
+                backgroundColor: 'var(--nba-red)',
+                color: 'var(--nba-white)',
+                fontWeight: 'bold',
+                '&.Mui-selected': {backgroundColor: 'var(--nba-red)', color: 'var(--nba-white)', fontWeight: 'bold'},
+                '&:not(.Mui-selected)': {backgroundColor: 'rgba(200, 0, 0, 0.6)', boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.5)'},
+                '&:hover': {backgroundColor: 'var(--nba-red)'},
+                '&.Mui-selected:hover': {backgroundColor: 'var(--nba-red)'}
+              }}>Season Totals</ToggleButton>
             </ToggleButtonGroup>
             {availableSeasons.length > 1 && (
-              <FormControl size="small" sx={{ minWidth: 150, '& .MuiOutlinedInput-root': {'& fieldset': {borderColor: 'var(--mavs-silver)'},'&:hover fieldset': {borderColor: 'var(--mavs-white)'},}, '& .MuiInputLabel-root': {color: 'var(--mavs-silver)'}, '& .MuiSelect-icon': {color: 'var(--mavs-silver)'}}}>
+              <FormControl size="small" sx={{ minWidth: 150, '& .MuiOutlinedInput-root': {'& fieldset': {borderColor: 'var(--nba-silver)'},'&:hover fieldset': {borderColor: 'var(--nba-white)'},}, '& .MuiInputLabel-root': {color: 'var(--nba-silver)'}, '& .MuiSelect-icon': {color: 'var(--nba-silver)'}}}>
                 <InputLabel id="season-select-label-profile">Season</InputLabel>
                 <Select<typeof selectedSeason>
                     labelId="season-select-label-profile"
                     value={selectedSeason}
                     label="Season"
                     onChange={(e: SelectChangeEvent<typeof selectedSeason>) => setSelectedSeason(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                    sx={{color: 'var(--mavs-white)'}}
-                    MenuProps={{ PaperProps: { sx: { backgroundColor: 'var(--mavs-navy-blue)'}}}}
+                    sx={{color: 'var(--nba-white)'}}
+                    MenuProps={{ PaperProps: { sx: { backgroundColor: 'var(--nba-navy-blue)'}}}}
                 >
-                  <MenuItem value="all" sx={{color: 'var(--mavs-white)'}}>All Seasons</MenuItem>
+                  <MenuItem value="all" sx={{color: 'var(--nba-white)'}}>All Seasons</MenuItem>
                   {availableSeasons.map(season => (
-                    <MenuItem key={season} value={season} sx={{color: 'var(--mavs-white)'}}>{season}</MenuItem>
+                    <MenuItem key={season} value={season} sx={{color: 'var(--nba-white)'}}>{season}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
             )}
           </Box>
           {displaySeasonLogs.map((log, index) => (
-            <Card key={`${log.playerId}-${log.Season}-${log.Team}-${index}`} sx={{ mb: 2, backgroundColor: 'var(--mavs-royal-blue)', borderRadius: '12px' }}>
+            <Card key={`${log.playerId}-${log.Season}-${log.Team}-${index}`} sx={{ mb: 2, backgroundColor: 'var(--nba-royal-blue)', borderRadius: '12px', border: '1px solid var(--nba-red)' }}>
               <CardContent>
-                <Typography variant="h6" gutterBottom sx={{color: 'var(--mavs-white)', fontWeight:'bold'}}>{log.Season} Season - {log.Team} ({log.League})</Typography>
+                <Typography variant="h6" gutterBottom sx={{color: 'var(--nba-white)', fontWeight:'bold'}}>{log.Season} Season - {log.Team} ({log.League})</Typography>
                 <Grid container spacing={1}>
                   {/*@ts-ignore*/}
                   <Grid item xs={12} sm={12} md={12}><StatDisplay label="PTS" value={log.PTS?.toFixed(1)} primaryTypographyProps={careerStatsPrimaryProps} secondaryTypographyProps={careerStatsSecondaryProps} /></Grid>
@@ -298,7 +322,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
 
       {playerGameLogs.length > 0 && (
         <SectionPaper title="Recent Game Logs (Max 10)">
-           <TableContainer component={Paper} sx={{ maxHeight: 400, backgroundColor: 'var(--mavs-navy-blue)', border: '1px solid var(--mavs-royal-blue)', borderRadius: '8px' }}>
+           <TableContainer component={Paper} sx={{ maxHeight: 400, backgroundColor: 'var(--nba-navy-blue)', border: '2px solid var(--nba-red)', borderRadius: '8px' }}>
             <Table stickyHeader size="small" aria-label="player game logs">
               <TableHead>
                 <TableRow>
@@ -315,7 +339,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
               </TableHead>
               <TableBody>
                 {playerGameLogs.slice(0, 10).map((log) => (
-                  <TableRow key={log.gameId} sx={{ '&:hover': { backgroundColor: 'rgba(0, 83, 140, 0.3)' }}}>
+                  <TableRow key={log.gameId} sx={{ '&:hover': { backgroundColor: 'rgba(23, 64, 139, 0.3)' }}}>
                     <TableCell sx={gameLogTableCellSx}>{new Date(log.date).toLocaleDateString()}</TableCell>
                     <TableCell sx={gameLogTableCellSx}>{log.opponent}</TableCell>
                     <TableCell sx={gameLogTableCellSx}>{formatGameLogTime(log.timePlayed)}</TableCell>
@@ -336,22 +360,22 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
       <SectionPaper title="Scouting Reports">
          <Box mb={2} sx={{maxHeight: '400px', overflowY: 'auto', pr: 1,
                 '&::-webkit-scrollbar': { width: '8px' },
-                '&::-webkit-scrollbar-track': { backgroundColor: 'var(--mavs-navy-blue)' },
-                '&::-webkit-scrollbar-thumb': { backgroundColor: 'var(--mavs-silver)', borderRadius: '4px' },
-                '&::-webkit-scrollbar-thumb:hover': { backgroundColor: 'var(--mavs-white)' }
+                '&::-webkit-scrollbar-track': { backgroundColor: 'var(--nba-navy-blue)' },
+                '&::-webkit-scrollbar-thumb': { backgroundColor: 'var(--nba-silver)', borderRadius: '4px' },
+                '&::-webkit-scrollbar-thumb:hover': { backgroundColor: 'var(--nba-white)' }
             }}>
           {currentReports.length > 0 ? currentReports.map((report) => (
-            <Paper key={report.reportId} sx={{ p: 2, mb: 2, backgroundColor: 'var(--mavs-royal-blue)', borderRadius: '8px' }}>
+            <Paper key={report.reportId} sx={{ p: 2, mb: 2, backgroundColor: 'var(--nba-royal-blue)', borderRadius: '8px', border: '1px solid var(--nba-red)' }}>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={0.5}>
-                <Typography variant="subtitle2" sx={{color: 'var(--mavs-white)', fontWeight: 'bold', fontSize: '1.0rem'}}>{report.scout}</Typography>
-                <Typography variant="caption" sx={{color: 'var(--mavs-silver)', fontSize: '0.9rem'}}>{report.date ? new Date(report.date).toLocaleDateString() : 'No Date'}</Typography>
+                <Typography variant="subtitle2" sx={{color: 'var(--nba-white)', fontWeight: 'bold', fontSize: '1.0rem'}}>{report.scout}</Typography>
+                <Typography variant="caption" sx={{color: 'var(--nba-silver)', fontSize: '0.9rem'}}>{report.date ? new Date(report.date).toLocaleDateString() : 'No Date'}</Typography>
               </Box>
               <Divider sx={{ borderColor: 'rgba(184, 196, 202, 0.3)', mb:1 }}/>
-              <Typography variant="body2" sx={{whiteSpace: "pre-wrap", color: 'var(--mavs-white)', fontSize: '1.0rem'}}>{report.report}</Typography>
+              <Typography variant="body2" sx={{whiteSpace: "pre-wrap", color: 'var(--nba-white)', fontSize: '1.0rem'}}>{report.report}</Typography>
             </Paper>
-          )) : <Typography sx={{color: 'var(--mavs-silver)', fontStyle: 'italic', fontSize: '1.0rem' }}>No scouting reports available for this player yet.</Typography>}
+          )) : <Typography sx={{color: 'var(--nba-silver)', fontStyle: 'italic', fontSize: '1.0rem' }}>No scouting reports available for this player yet.</Typography>}
         </Box>
-        <Typography variant="h6" gutterBottom sx={{color: 'var(--mavs-white)', mt: 3, fontWeight: 'bold'}}>Add New Report</Typography>
+        <Typography variant="h6" gutterBottom sx={{color: 'var(--nba-white)', mt: 3, fontWeight: 'bold'}}>Add New Report</Typography>
          <TextField
               label="Scout Name"
               value={selectedScout}
@@ -359,7 +383,7 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
               variant="outlined"
               fullWidth
               margin="normal"
-              sx={{ input: { color: 'var(--mavs-white)' }, label: { color: 'var(--mavs-silver)' }, '& .MuiOutlinedInput-root': {'& fieldset': {borderColor: 'var(--mavs-silver)'},'&:hover fieldset': {borderColor: 'var(--mavs-white)'}, '&.Mui-focused fieldset': {borderColor: 'var(--mavs-white)'}}}}
+              sx={{ input: { color: 'var(--nba-white)' }, label: { color: 'var(--nba-silver)' }, '& .MuiOutlinedInput-root': {'& fieldset': {borderColor: 'red'},'&:hover fieldset': {borderColor: 'red'}, '&.Mui-focused fieldset': {borderColor: 'red'}}}}
           />
         <TextField
           label="New Scouting Report Details"
@@ -372,18 +396,28 @@ const PlayerProfile = ({ playerData }: PlayerProfileProps) => {
           margin="normal"
           sx={{
               '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: 'var(--mavs-silver)' },
-                  '&:hover fieldset': { borderColor: 'var(--mavs-white)' },
-                  '&.Mui-focused fieldset': { borderColor: 'var(--mavs-white)' },
-                  '& textarea': { color: 'var(--mavs-white)' },
+                  '& fieldset': { borderColor: 'var(--nba-red)' },
+                  '&:hover fieldset': { borderColor: 'var(--nba-red)' },
+                  '&.Mui-focused fieldset': { borderColor: 'var(--nba-red)' },
+                  '& textarea': { color: 'var(--nba-white)' },
               },
-              label: { color: 'var(--mavs-silver)'}
+              label: { color: 'var(--nba-silver)'}
           }}
         />
         <Button
           variant="contained"
           onClick={handleAddReport}
-          sx={{ mt: 1, backgroundColor: 'var(--mavs-silver)', color: 'var(--mavs-navy-blue)', fontWeight: 'bold', '&:hover': {backgroundColor: 'var(--mavs-white)'} }}
+          sx={{
+            backgroundColor: 'var(--nba-red)',
+            color: 'var(--nba-white)',
+            fontWeight: 'bold',
+            border: '2px solid var(--nba-white)',
+            mt: 1,
+            '&:hover': {
+              backgroundColor: '#a00020', 
+              borderColor: 'var(--nba-silver)',
+            },
+          }}
         >
           Add Report
         </Button>

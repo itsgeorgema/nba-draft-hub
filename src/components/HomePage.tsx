@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Typography, Container, Button, Paper, Box, Grid, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import mavsLogo from '../assets/mavs-logo.png';
+import mavsLogo from '../assets/nba-logo2.png';
 import type { DraftData, PlayerBio, ScoutRanking, SeasonLog } from '../types';
 import { calculateAge, calculatePerGameStats } from '../dataUtils';
 
@@ -10,12 +10,12 @@ interface HomePageProps {
 }
 
 const OverviewStat: React.FC<{ label: string; value: string | number | undefined | null; unit?: string; subValue?: string | null }> = ({ label, value, unit = '', subValue }) => (
-  <Paper elevation={2} sx={{ p: {xs: 2, sm: 2.5}, textAlign: 'center', backgroundColor: 'var(--mavs-royal-blue)', borderRadius: '12px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-    <Typography variant="h6" sx={{ color: 'var(--mavs-silver)', fontWeight: 'medium', fontSize: '1rem', mb: 0.5 }}>{label}</Typography>
-    <Typography variant="h4" sx={{ color: 'var(--mavs-white)', fontWeight: 'bold', fontSize: {xs: '1.8rem', sm: '2.1rem'}, lineHeight: 1.2 }}>
+  <Paper elevation={2} sx={{ p: {xs: 2, sm: 2.5}, textAlign: 'center', backgroundColor: 'var(--nba-royal-blue)', borderRadius: '12px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', border: '1px solid var(--nba-red)' }}>
+    <Typography variant="h6" sx={{ color: 'var(--nba-silver)', fontWeight: 'medium', fontSize: '1rem', mb: 0.5 }}>{label}</Typography>
+    <Typography variant="h4" sx={{ color: 'var(--nba-white)', fontWeight: 'bold', fontSize: {xs: '1.8rem', sm: '2.1rem'}, lineHeight: 1.2 }}>
       {value ?? 'N/A'}{value != null && String(value).trim() !== 'N/A' && unit ? unit : ''}
     </Typography>
-    {subValue && <Typography variant="caption" sx={{color: 'var(--mavs-silver)', fontSize: '0.85rem', mt: 0.5}}>{subValue}</Typography>}
+    {subValue && <Typography variant="caption" sx={{color: 'var(--nba-silver)', fontSize: '0.85rem', mt: 0.5}}>{subValue}</Typography>}
   </Paper>
 );
 
@@ -127,8 +127,8 @@ const HomePage = ({ playerData }: HomePageProps) => {
   if (!playerData) { 
     return (
       <Container sx={{ textAlign: 'center', mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 200px)'}}>
-        <CircularProgress sx={{color: 'var(--mavs-white)'}}/>
-        <Typography sx={{mt: 2, color: 'var(--mavs-silver)'}}>Loading player data for homepage...</Typography>
+        <CircularProgress sx={{color: 'var(--nba-white)'}}/>
+        <Typography sx={{mt: 2, color: 'var(--nba-silver)'}}>Loading player data for homepage...</Typography>
       </Container>
     );
   }
@@ -140,20 +140,20 @@ const HomePage = ({ playerData }: HomePageProps) => {
         sx={{ 
           p: { xs: 3, sm: 4, md: 5 }, 
           mb: 4,
-          backgroundColor: 'var(--mavs-navy-blue)', 
-          color: 'var(--mavs-white)',
+          backgroundColor: 'var(--nba-navy-blue)', 
+          color: 'var(--nba-white)',
           borderRadius: '20px',
-          border: '1px solid var(--mavs-royal-blue)',
+          border: '2px solid var(--nba-red)',
           textAlign: 'center',
         }}
       >
         <Box sx={{ mb: 3 }}>
-          <img src={mavsLogo} alt="Dallas Mavericks Logo" style={{ height: '100px', marginBottom: '16px' }} />
+          <img src={mavsLogo} alt="NBA Logo" style={{ height: '100px', marginBottom: '16px' }} />
         </Box>
-        <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'var(--mavs-white)', fontSize: {xs: '2.2rem', sm: '3rem', md: '3.5rem'} }}>
-          Dallas Mavericks Draft Hub 2025
+        <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'var(--nba-white)', fontSize: {xs: '2.2rem', sm: '3rem', md: '3.5rem'} }}>
+          NBA Draft Hub 2025
         </Typography>
-        <Typography variant="h5" sx={{ color: 'var(--mavs-silver)', mb: 4, lineHeight: 1.6, fontSize: {xs: '1rem', sm: '1.15rem', md: '1.25rem'}, maxWidth: '750px', marginX: 'auto' }}>
+        <Typography variant="h5" sx={{ color: 'var(--nba-silver)', mb: 4, lineHeight: 1.6, fontSize: {xs: '1rem', sm: '1.15rem', md: '1.25rem'}, maxWidth: '750px', marginX: 'auto' }}>
           Welcome to the central hub for the 2025 NBA Draft.
           Explore comprehensive prospect information, including detailed bios, measurements,
           career statistics, and scouting reports to make informed decisions.
@@ -162,14 +162,16 @@ const HomePage = ({ playerData }: HomePageProps) => {
           variant="contained"
           onClick={() => navigate('/bigboard')}
           sx={{
-            backgroundColor: 'var(--mavs-royal-blue)',
-            color: 'var(--mavs-white)',
+            backgroundColor: 'var(--nba-red)',
+            color: 'var(--nba-white)',
             padding: '14px 28px',
             fontSize: {xs: '1rem', sm: '1.15rem'},
             fontWeight: 'bold',
             borderRadius: '10px',
+            border: '2px solid var(--nba-white)',
             '&:hover': {
-              backgroundColor: '#004A9E', 
+              backgroundColor: '#a00020', 
+              borderColor: 'var(--nba-silver)',
             },
           }}
         >
@@ -182,13 +184,13 @@ const HomePage = ({ playerData }: HomePageProps) => {
         sx={{ 
           p: { xs: 2, sm: 3, md: 4 }, 
           mb: 4,
-          backgroundColor: 'var(--mavs-navy-blue)', 
-          color: 'var(--mavs-white)',
+          backgroundColor: 'var(--nba-navy-blue)', 
+          color: 'var(--nba-white)',
           borderRadius: '20px',
-          border: '1px solid var(--mavs-royal-blue)'
+          border: '2px solid var(--nba-red)'
         }}
       >
-        <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 'bold', color: 'var(--mavs-white)', textAlign: 'center', mb: {xs: 3, sm: 4}, fontSize: {xs: '1.8rem', sm: '2.2rem', md: '2.5rem'} }}>
+        <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 'bold', color: 'var(--nba-white)', textAlign: 'center', mb: {xs: 3, sm: 4}, fontSize: {xs: '1.8rem', sm: '2.2rem', md: '2.5rem'} }}>
           Draft Class Snapshot
         </Typography>
         <Grid container spacing={{xs: 2, sm: 3}} justifyContent="center">
@@ -221,10 +223,10 @@ const HomePage = ({ playerData }: HomePageProps) => {
         }}
       >
         <Container maxWidth="lg">
-          <Typography variant="body2" sx={{color: 'var(--mavs-silver)'}} align="center">
-            Not officially affiliated with the Dallas Mavericks or the NBA.
+          <Typography variant="body2" sx={{color: 'var(--nba-silver)'}} align="center">
+            Not officially affiliated with the NBA.
           </Typography>
-           <Typography variant="caption" sx={{color: 'var(--mavs-silver)', display: 'block', textAlign: 'center', mt: 0.5}}>
+           <Typography variant="caption" sx={{color: 'var(--nba-silver)', display: 'block', textAlign: 'center', mt: 0.5}}>
             All data is for informational purposes only.
           </Typography>
         </Container>
